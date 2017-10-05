@@ -1,0 +1,26 @@
+{
+  "name": "sew-push-service",
+  "version": "1.0.0",
+  "description": "SEW PoC push notification module for user interface",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Anoop.P",
+  "license": "ISC",
+  "dependencies": {
+    "azure-event-hubs": "0.0.8",
+    "body-parser": "^1.18.2",
+    "csv-parse": "^1.2.3",
+    "edge": "^7.10.1",
+    "express": "^4.15.5",
+    "kafka-node": "^2.2.3",
+    "method-override": "^2.3.10",
+    "msnodesqlv8": "^0.4.5",
+    "mssql": "^4.0.4",
+    "node-stringify": "^0.2.0",
+    "sleep": "^5.1.1",
+    "socket.io": "^2.0.3",
+    "twilio": "^3.7.0"
+  }
+}

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+div.container {
+    width: 100%;
+    border: 1px solid gray;
+}
+
+header, footer {
+    padding: 1em;
+    color: white;
+    background-color: black;
+    clear: left;
+    text-align: center;
+}
+
+nav {
+    float: left;
+    max-width: 160px;
+    margin: 0;
+    padding: 1em;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+   
+nav ul a {
+    text-decoration: none;
+}
+
+article {
+    margin-left: 170px;
+    border-left: 1px solid gray;
+    padding: 1em;
+    overflow: hidden;
+}
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+	<nav>
+	  <ul>
+		<li><a href="#">London</a></li>
+		<li><a href="#">Paris</a></li>
+		<li><a href="#">Tokyo</a></li>
+	  </ul>
+	</nav>
+
+	<article>
+	  <div id="map" style="width:100%;height:100%;"></div>
+	</article>
+</div>
+
+<div id="detModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Some text in the Modal..</p>
+  </div>
+</div>
+
+<script src = "/socket.io/socket.io.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnktV5d-3cz13fD7WibXs1eZ8utLxRioY"></script>
+<script>
+var mapCanvas = document.getElementById("map");  
+
+var myCenter=new google.maps.LatLng(-37.80981786,144.9298811);
+var mapOptions = {center: myCenter, zoom: 13};
+var map = new google.maps.Map(mapCanvas, mapOptions);
+
+//Zone1 Boundaries
+
+var z1b1=new google.maps.LatLng(-37.80866507,	144.9180365);
+var z1b2=new google.maps.LatLng(-37.80981786, 144.9298811);
+var z1b3=new google.maps.LatLng(-37.81449664,	144.9286366);
+var z1b4=new google.maps.LatLng(-37.81673421,	144.917264);
+
+	
+
+
+var vic3000 = new google.maps.Polygon({
+    path: [z1b1, z1b2, z1b3, z1b4],
+    strokeColor: "green",
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: "green",
+    fillOpacity: 0.4
+  });
+//Zone 2 boundaries
+
+var z2b1=new google.maps.LatLng(-37.8098178582854,	144.929881095886);
+var z2b2=new google.maps.LatLng(-37.8050370609216, 144.944515228271);
+var z2b3=new google.maps.LatLng(-37.814327121061,	144.942970275878);
+var z2b4=new google.maps.LatLng(-37.8169376210025,	144.931426048278);
+
+  
+var vic3004 = new google.maps.Polygon({
+    path: [z2b1, z2b2, z2b3, z2b4],
+    strokeColor: "green",
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: "green",
+    fillOpacity: 0.4
+  });
+  
+  
+vic3000.setMap(map);
+vic3004.setMap(map);
+
+
+var socket = io();
+
+socket.on('newMsg', function(data){
+
+var strData = JSON.stringify(data.value);
+var formData = replaceAll(strData.substring(2, strData.length - 2),'\'', '"');
+	
+markOnMap(JSON.parse(formData));
+});
+  
+
+function markOnMap(data) {
+
+  var meterLoc=new google.maps.LatLng(data.long,data.latt);
+  var marker = new google.maps.Marker({position:meterLoc, icon: 'healthicon/'+data.leak});
+  marker.setMap(map);
+  
+  google.maps.event.addListener(map, 'zoom_changed', function() {
+    var zoom = map.getZoom();
+
+    // Update May 2017
+    //   You can now use setVisible() on a marker instead of
+    //   setting the map to a null value.
+    if (zoom < 15) {
+        marker.setMap(null);
+    } else {
+        marker.setMap(map);
+    }
+});
+  
+  
+  if(data.leak>50)
+	{
+		var affectedZone=eval(data.pin);
+		affectedZone.setOptions({strokeWeight: 2.0, fillColor: 'red'});
+	}
+	google.maps.event.addListener(marker, 'click', function(event) {
+		placeMarker(map, data, marker);
+	});
+}
+
+function placeMarker(map, data, marker) {
+
+  var infowindow = new google.maps.InfoWindow({
+    content: '<div>Latitude: ' + data.latt + '<br>Longitude: ' + data.long + '<br>Leak Probability: <b>' + data.leak + '% </b> <a href="#"> Action </a> <button id="detLnk" onClick="showModal()">Details</button></div>'
+  });
+  infowindow.open(map,marker);
+}
+
+function replaceAll(str, find, replace) {
+    return str.replace(new RegExp(find, 'g'), replace);
+}
+//Modal window
+
+
+// Get the modal
+var modal = document.getElementById('detModal');
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+function showModal() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+</body>
+</html>
