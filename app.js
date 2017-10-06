@@ -2,29 +2,22 @@ var app = require('express')();
 var http = require('http').Server(app);
 var path = require('path');
 var io = require('socket.io')(http);
-
+var kafka = require('kafka-node');
 var stringify = require('node-stringify');
-
-var Connection = require('tedious').Connection;
-var Request = require('tedious').Request;
-
+var HighLevelConsumer = kafka.HighLevelConsumer;
+var Client = kafka.Client;
+var sql = require('mssql/msnodesqlv8');
 //DB config
 
-  // Create connection to database
-var config = 
-   {
-     userName: 'seqsqladmin', // update me
-     password: 'Pa$$w0rd098', // update me
-     server: 'sewsqlsrv01.database.windows.net', // update me
-     options: 
-        {
-           database: 'sewsql01' //update me
-           , encrypt: true
-        }
-   }
-var connection = new Connection(config);
-
-// Attempt to connect and execute queries if connection goes through
+  const config = {
+    user: 'seqsqladmin',
+    password: 'Pa$$w0rd098',
+    server: 'sewsqlsrv01.database.windows.net', // You can use 'localhost\\instance' to connect to named instance
+    database: 'sewsql01',
+    options: {
+        encrypt: true // Use this if you're on Windows Azure
+    }
+}
 
 
 //twilio instance
@@ -55,22 +48,54 @@ app.get('/js/:jsFile', function(req,res){
 });
 
 app.get('/getsewloc', function(req,res){
-connection.on('connect', function(err) 
-   {
-     if (err) 
-       {
-          console.log(err)
-       }
-    else
-       {
-	    var query = "select distinct sdl.[Lattitude], sdl.[Longitude],  sct.[street_name] from dbo.sew_device_loc sdl, [dbo].[CRM_Data] crm where sdl.deviceData=crm.property_id";
-        var result = queryDatabase(query);
-		
-		res.send(result);
-       }
-   }
- );
+		sql.connect(config)
+		.then(function() {
+		 const request = new sql.Request()
+				request.execute('dbo.SP_GET_SEW_LOC', (err, result) => {
+					console.log(result.recordset); // 
+					res.send(result.recordset);
+					sql.close();
+				});
+		})
+		.catch(function(err) {
+		  console.log(err);
+		});
 });
+
+app.get('/getcustomerdetails/:meterId', function(req,res){
+		sql.connect(config)
+		.then(function() {
+		 const request = new sql.Request();
+		 var meterId = req.params.meterId;
+		 request.input('prop_id', sql.VarChar(50), meterId);
+				request.execute('dbo.SP_GET_SEW_CUSTOMER_DETAILS_BY_PROPID', (err, result) => {
+					console.log(result.recordset); // 
+					res.send(result.recordset);
+					sql.close();
+				});
+		})
+		.catch(function(err) {
+		  console.log(err);
+		});
+});
+
+app.get('/getbillingdetails/:custId', function(req,res){
+		sql.connect(config)
+		.then(function() {
+		 const request = new sql.Request();
+		 var custId = req.params.custId;
+		 request.input('cust_id', sql.VarChar(50), custId);
+				request.execute('dbo.SP_GET_SEW_BILLING_DETAILS_BY_USTID', (err, result) => {
+					console.log(result.recordset); // 
+					res.send(result.recordset);
+					sql.close();
+				});
+		})
+		.catch(function(err) {
+		  console.log(err);
+		});
+});
+
 
 app.get('/sendsms/:mobileNumber', function(req,res){
 var toMobileNumer = req.params.mobileNumber;
@@ -79,6 +104,28 @@ twilioclient.messages.create({
   to:toMobileNumer,
   body: "Hello world from Node JS SEW App"
 }).then((messsage) => console.log(message.sid));
+});
+
+var client = new Client('localhost:2181');
+var topics = [{
+  topic: 'sew'
+}];
+
+var options = {
+  autoCommit: true,
+  fetchMaxWaitMs: 1000,
+  fetchMaxBytes: 1024 * 1024
+};
+var consumer = new HighLevelConsumer(client, topics, options);
+io.on('connection', function(socket) {
+consumer.on('message', function(message) {
+  console.log(message);
+  socket.emit('newMsg',message);
+});
+});
+
+consumer.on('error', function(err) {
+  console.log('error', err);
 });
 
 var EventHubClient = require('azure-event-hubs').Client;
@@ -102,22 +149,3 @@ eventHubClient.open()
 http.listen(3000, function() {
    console.log('listening on *:3000');
 });
-
-function queryDatabase(query)
-{ 
-	console.log('Reading rows from the Table...');
-
-       // Read all rows from table
-     request = new Request(
-          query,
-             function(err, rowCount, rows) 
-                {
-                    console.log(rows);
-					return rows;
-                    //process.exit();
-                }
-            );
-
-     
-     connection.execSql(request);
-}
