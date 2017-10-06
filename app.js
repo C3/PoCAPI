@@ -3,11 +3,9 @@ var http = require('http').Server(app);
 var path = require('path');
 var io = require('socket.io')(http);
 var stringify = require('node-stringify');
-const sql = require('mssql');
+const sql = require('mssql'); 
 //DB config
-const dbconfig = "jdbc:sqlserver://sewsqlsrv01.database.windows.net:1433;database=sewsql01;" + 
-				"user=seqsqladmin@sewsqlsrv01;password=Pa$$w0rd098;encrypt=true;"+
-				"trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+const dbconfig = "Server=tcp:sewsqlsrv01.database.windows.net,1433;Initial Catalog=sewsql01;Persist Security Info=False;User ID=seqsqladmin;Password=Pa$$w0rd098;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
 
 //REST end points
