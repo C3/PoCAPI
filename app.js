@@ -5,15 +5,9 @@ var io = require('socket.io')(http);
 var stringify = require('node-stringify');
 const sql = require('mssql');
 //DB config
-const dbconfig = {
-    user: 'seqsqladmin',
-    password: 'Pa$$w0rd098',
-    server: 'sewsqlsrv01.database.windows.net', // You can use 'localhost\\instance' to connect to named instance
-    database: 'sewsql01',
-    options: {
-        encrypt: true // Use this if you're on Windows Azure
-    }
-}
+const dbconfig = "jdbc:sqlserver://sewsqlsrv01.database.windows.net:1433;database=sewsql01;" + 
+				"user=seqsqladmin@sewsqlsrv01;password=Pa$$w0rd098;encrypt=true;"+
+				"trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
 
 
 //REST end points
