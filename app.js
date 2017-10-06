@@ -128,7 +128,23 @@ consumer.on('error', function(err) {
   console.log('error', err);
 });
 
-
+var EventHubClient = require('azure-event-hubs').Client;
+ 
+var eventHubClient = EventHubClient.fromConnectionString('Endpoint=sb://sewehd001.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=T8RE+I9K0/ch7xBuZpCXpFCkbrb5Pdcm7llU7usicmM=', 'sew-meter-data')
+eventHubClient.open()
+    .then(function() {
+        return eventHubClient.createReceiver('sew-leak-detection', '10', { startAfterTime: Date.now() })
+    })
+    .then(function (rx) {
+        rx.on('errorReceived', function (err) { console.log(err); }); 
+        rx.on('message', function (message) {
+            var body = message.body;
+            // See http://azure.github.io/amqpnetlite/articles/azure_sb_eventhubs.html for details on message annotation properties from EH. 
+           // var enqueuedTime = Date.parse(message.systemProperties['x-opt-enqueued-time']);
+			console.log(body);
+			socket.emit('newMsg',body);
+        });
+    });
 
 http.listen(3000, function() {
    console.log('listening on *:3000');
