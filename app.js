@@ -9,14 +9,16 @@ var Client = kafka.Client;
 var sql = require('mssql/msnodesqlv8');
 //DB config
 
-const config = {
-  database: "wfm",
-  server: "IN16991970W2",
-  driver: "msnodesqlv8",
-  options: {
-    trustedConnection: true
-  }
-};
+  const config = {
+    user: 'seqsqladmin',
+    password: 'Pa$$w0rd098',
+    server: 'sewsqlsrv01.database.windows.net', // You can use 'localhost\\instance' to connect to named instance
+    database: 'sewsql01',
+    options: {
+        encrypt: true // Use this if you're on Windows Azure
+    }
+}
+
 
 //twilio instance
 
