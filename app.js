@@ -5,6 +5,8 @@ var io = require('socket.io')(http);
 
 var stringify = require('node-stringify');
 
+var Connection = require('tedious').Connection;
+var Request = require('tedious').Request;
 
 //DB config
 
