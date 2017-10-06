@@ -52,6 +52,25 @@ app.get('/getsewloc', function(req,res){
 		});
 });
 
+var EventHubClient = require('azure-event-hubs').Client;
+ 
+var eventHubClient = EventHubClient.fromConnectionString('Endpoint=sb://sewehd001.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=T8RE+I9K0/ch7xBuZpCXpFCkbrb5Pdcm7llU7usicmM=', 'sew-meter-data')
+io.on('connection', function(socket) {
+	eventHubClient.open()
+    .then(function() {
+        return eventHubClient.createReceiver('sew-leak-detection', '0', { startAfterTime: Date.now() })
+    })
+    .then(function (rx) {
+        rx.on('errorReceived', function (err) { console.log(err); }); 
+        rx.on('message', function (message) {
+            var body = message.body;
+			console.log(body);
+			socket.emit('newMsg',body);
+        });
+    });
+});
+
+
 var port = normalizePort(process.env.PORT || '3000');
 http.listen(port, function() {
    console.log('listening on *:'+port);
