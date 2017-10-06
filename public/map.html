@@ -102,6 +102,8 @@ article {
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="/js/barChart.js"></script>
+<script src="/js/jquery-editable-select.min.js"></script>
+<link href="/js/jquery-editable-select.min.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -111,7 +113,10 @@ article {
 	  <li><b>Meter Location Filter</b></li>
 	  <li>&nbsp;</li>
 		<li>
-			<select ng-model="meterselect" ng-options="key as value for (key , value) in meterdrop" onchange="geocodeLatLng(this.value);"></select>
+			
+			<select onchange="geocodeLatLng(this.value);" id="location">
+				<option ng-repeat="(key,value) in meterdrop" value="{{key}}">{{key}}</option>
+			</select>
 		</li>
 	  </ul>
 	</nav>
@@ -145,7 +150,7 @@ article {
 
 <script>
 var mapCanvas = document.getElementById("map");  
-
+ //$('#location').editableSelect();
 var myCenter=new google.maps.LatLng(-37.80981786,144.9298811);
 var mapOptions = {center: myCenter, zoom: 13};
 var map = new google.maps.Map(mapCanvas, mapOptions);
@@ -191,10 +196,7 @@ var socket = io();
 
 socket.on('newMsg', function(data){
 
-var strData = JSON.stringify(data.value);
-var formData = replaceAll(strData.substring(2, strData.length - 2),'\'', '"');
-	
-markOnMap(JSON.parse(formData));
+markOnMap(data);
 });
   
 
@@ -350,13 +352,15 @@ angular.module('sewApp', [])
     $http.get('/getsewloc').
         then(function(response) {
 			
-			var meterDropData = {};
+			var meterDropData = [];
 			for(var i=0; i< response.data.length;i++)
 			{
 				var res = response.data[i]; 
 				var key = res.lattitude + ',' + res.longitude  ;
 				var value=  res.location ;
-				meterDropData[key] = value;
+				var obj = {};
+				obj[key] = value;
+				meterDropData.push(obj);
 			}
 			
             $scope.meterdrop = meterDropData;
