@@ -5,7 +5,16 @@ var io = require('socket.io')(http);
 var stringify = require('node-stringify');
 const sql = require('mssql'); 
 //DB config
-const dbconfig = "Server=tcp:sewsqlsrv01.database.windows.net,1433;Initial Catalog=sewsql01;Persist Security Info=False;User ID=seqsqladmin;Password=Pa$$w0rd098;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+const dbconfig =    {
+     userName: 'seqsqladmin', // update me
+     password: 'Pa$$w0rd098', // update me
+     server: 'sewsqlsrv01.database.windows.net', // update me
+     options: 
+        {
+           database: 'sewsql01' //update me
+           , encrypt: true
+        }
+   };
 
 
 //REST end points
