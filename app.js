@@ -6,7 +6,7 @@ var stringify = require('node-stringify');
 const sql = require('mssql'); 
 //DB config
 const dbconfig =    {
-     userName: 'seqsqladmin@sewsqlsrv01', // update me
+     user: 'seqsqladmin', // update me
      password: 'Pa$$w0rd098', // update me
      server: 'sewsqlsrv01.database.windows.net', // update me
      options: 
