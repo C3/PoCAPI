@@ -42,8 +42,10 @@ app.get('/getsewloc', function(req,res){
 		.then(function() {
 		 const request = new sql.Request()
 				request.execute('dbo.SP_GET_SEW_LOC', (err, result) => {
-					console.log(result.recordset); // 
-					res.send(result.recordset);
+				if(err)
+					console.log(err); // 
+				else
+					res.send(result);
 					sql.close();
 				});
 		})
