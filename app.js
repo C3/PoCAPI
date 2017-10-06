@@ -2,10 +2,20 @@ var app = require('express')();
 var http = require('http').Server(app);
 var path = require('path');
 var io = require('socket.io')(http);
-
 var stringify = require('node-stringify');
 
 //DB config
+var sql = require('node-sqlserver');
+
+var conn_str = "Server=tcp:sewsqlsrv01.database.windows.net,1433;"+
+				"Initial Catalog=sewsql01;"+
+				"Security Info=False;"+
+				"User ID=seqsqladmin;"+
+				"Password=Pa$$w0rd098;"+
+				"MultipleActiveResultSets=False;"+
+				"Encrypt=True;"+
+				"TrustServerCertificate=False;"+
+				"Connection Timeout=30";
 
 
 //REST end points
@@ -29,18 +39,22 @@ app.get('/js/:jsFile', function(req,res){
 });
 
 app.get('/getsewloc', function(req,res){
-		sql.connect(config)
-		.then(function() {
-		 const request = new sql.Request()
-				request.execute('dbo.SP_GET_SEW_LOC', (err, result) => {
-					console.log(result.recordset); // 
-					res.send(result.recordset);
-					sql.close();
-				});
-		})
-		.catch(function(err) {
-		  console.log(err);
-		});
+	var sewLocQry = "select distinct sdl.[Lattitude], sdl.[Longitude], sct.[street_name] from dbo.sew_device_loc sdl, [dbo].[CRM_Data] crm where sdl.deviceData=crm.property_id";
+		    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    sql.open(conn_str, function (err, conn) {
+        if (err) {
+            res.end("Error opening the connection!");
+            return;
+        }
+        conn.queryRaw(sewLocQry, function (err, results) {
+            if (err) {
+                res.write("Error running query!");
+                return;
+            }
+            console.log("row count = " + results.rows.length + "\n");
+            res.send(results);
+        }); 
+    });
 });
 
 var EventHubClient = require('azure-event-hubs').Client;
