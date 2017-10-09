@@ -68,6 +68,7 @@ io.on('connection', function(socket) {
             var body = message.body;
 			console.log(body);
 			socket.emit('newMsg',body);
+			eventHubClient.close();
         });
     });
 });
