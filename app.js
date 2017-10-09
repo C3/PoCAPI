@@ -42,10 +42,14 @@ app.get('/getsewloc', function(req,res){
 		.then(function() {
 		 const request = new sql.Request()
 				request.execute('dbo.SP_GET_SEW_LOC', (err, result) => {
+				if(!err){
 					console.log(result.recordset); // 
 					res.send(result.recordset);
+					}
 					sql.close();
 				});
+				
+				
 		})
 		.catch(function(err) {
 		  console.log(err);
@@ -59,8 +63,10 @@ app.get('/getcustomerdetails/:meterId', function(req,res){
 		 var meterId = req.params.meterId;
 		 request.input('prop_id', sql.VarChar(50), meterId);
 				request.execute('dbo.SP_GET_SEW_CUSTOMER_DETAILS_BY_PROPID', (err, result) => {
+					if(!err){
 					console.log(result.recordset); // 
 					res.send(result.recordset);
+					}
 					sql.close();
 				});
 		})
@@ -76,8 +82,10 @@ app.get('/getbillingdetails/:custId', function(req,res){
 		 var custId = req.params.custId;
 		 request.input('cust_id', sql.VarChar(50), custId);
 				request.execute('dbo.SP_GET_SEW_BILLING_DETAILS_BY_USTID', (err, result) => {
+				if(!err){
 					console.log(result.recordset); // 
 					res.send(result.recordset);
+					}
 					sql.close();
 				});
 		})
