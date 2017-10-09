@@ -9,10 +9,11 @@ const dbconfig =    {
      user: 'seqsqladmin', // update me
      password: 'Pa$$w0rd098', // update me
      server: 'sewsqlsrv01.database.windows.net', // update me
+	 database: 'sewsql01',
      options: 
         {
-           database: 'sewsql01' //update me
-           , encrypt: true
+            //update me
+           encrypt: true
         }
    };
 
