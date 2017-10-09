@@ -38,7 +38,7 @@ app.get('/js/:jsFile', function(req,res){
 });
 
 app.get('/getsewloc', function(req,res){
-		sql.connect(config)
+		sql.connect(dbconfig)
 		.then(function() {
 		 const request = new sql.Request()
 				request.execute('dbo.SP_GET_SEW_LOC', (err, result) => {
@@ -53,7 +53,7 @@ app.get('/getsewloc', function(req,res){
 });
 
 app.get('/getcustomerdetails/:meterId', function(req,res){
-		sql.connect(config)
+		sql.connect(dbconfig)
 		.then(function() {
 		 const request = new sql.Request();
 		 var meterId = req.params.meterId;
@@ -70,7 +70,7 @@ app.get('/getcustomerdetails/:meterId', function(req,res){
 });
 
 app.get('/getbillingdetails/:custId', function(req,res){
-		sql.connect(config)
+		sql.connect(dbconfig)
 		.then(function() {
 		 const request = new sql.Request();
 		 var custId = req.params.custId;
