@@ -195,7 +195,7 @@ vic3004.setMap(map);
 var socket = io();
 
 socket.on('newMsg', function(data){
-
+alert(JSON.stringify(data));
 markOnMap(data);
 });
   
