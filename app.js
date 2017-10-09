@@ -70,7 +70,7 @@ io.on('connection', function(socket) {
 			socket.emit('newMsg',body);
         });
     });
-eventHubClient.close();
+
 });
 
 
