@@ -53,11 +53,17 @@ app.get('/getsewloc', function(req,res){
 		  console.log(err);
 		});
 });
-
-var EventHubClient = require('azure-event-hubs').Client;
-
-var eventHubClient = EventHubClient.fromConnectionString('Endpoint=sb://sewehd001.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=T8RE+I9K0/ch7xBuZpCXpFCkbrb5Pdcm7llU7usicmM=', 'sew-meter-data')
 io.on('connection', function(socket) {
+	console.log('user disconnected');
+	socket.on('disconnect', function(){
+		console.log('user disconnected');
+		  socket.removeAllListeners('disconnect');
+		  io.removeAllListeners('connection');
+	  });
+});
+var EventHubClient = require('azure-event-hubs').Client;
+var eventHubClient = EventHubClient.fromConnectionString('Endpoint=sb://sewehd001.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=T8RE+I9K0/ch7xBuZpCXpFCkbrb5Pdcm7llU7usicmM=', 'sew-meter-data')
+
 	eventHubClient.open()
     .then(function() {
         return eventHubClient.createReceiver('sew-leak-detection', '0', { startAfterTime: Date.now() })
@@ -67,12 +73,9 @@ io.on('connection', function(socket) {
         rx.on('message', function (message) {
             var body = message.body;
 			console.log(body);
-			socket.emit('newMsg',body);
+			io.sockets.emit('newMsg',body);
         });
     });
-
-});
-
 
 var port = normalizePort(process.env.PORT || '3000');
 http.listen(port, function() {
