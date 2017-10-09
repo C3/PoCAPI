@@ -98,7 +98,7 @@ article {
 <script src = "/socket.io/socket.io.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnktV5d-3cz13fD7WibXs1eZ8utLxRioY"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angucomplete-alt/2.4.1/angucomplete-alt.min.js"></script>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="/js/barChart.js"></script>
@@ -114,11 +114,27 @@ article {
 	  <li>&nbsp;</li>
 		<li>
 			
-			<select onchange="geocodeLatLng(this.value);" id="location">
-				<option ng-repeat="(key,value) in meterdrop" value="{{key}}">{{key}}</option>
-			</select>
+			<angucomplete-alt id="ex1"
+			placeholder="Search Location"
+			selected-object="onChangeMeter"
+			local-data="meterdrop"
+			search-fields="key,value"
+			title-field="value"
+			minlength="1"
+			inputclass="form-control form-control-small"
+			match-class="highlight" />
 		</li>
 	  </ul>
+	  <ul><li><input type="checkbox" onchange="applyFilter('lowFlowLL',this);"/>Low Flow Alarm</li></ul>
+	  <ul><li><input type="checkbox" onchange="applyFilter('highFlowLL',this);"/>High Flow Alarm</li></ul>
+	  <ul><li><input type="checkbox" onchange="applyFilter('contUsageLL',this);"/>Cont. Usage Alarm</li></ul>
+	  <ul><li><input type="checkbox" onchange="applyFilter('reverseFlowLL',this);"/>Reverse Flow Alarm</li></ul>
+	  <ul><li><input type="checkbox" onchange="applyFilter('emptyPipeLL',this);"/>Empty Pipe</li></ul>
+	  <ul><li><input type="checkbox" onchange="applyFilter('highPressureLL',this);"/>High Pressure Alarm</li></ul>
+	  <ul><li><input type="checkbox" onchange="applyFilter('nwLeakLL',this);"/>Network Leak</li></ul>
+	  <ul><li><input type="checkbox" onchange="applyFilter('lowTempLL',this);"/>Low Temperature</li></ul>
+	  <ul><li><input type="checkbox" onchange="applyFilter('highTempLL',this);"/>High Temperature</li></ul>
+	  <ul><li><input type="checkbox" onchange="applyFilter('vibHotLL',this);"/>Vibration Hotspot</li></ul>
 	</nav>
 
 	<article>
@@ -150,60 +166,83 @@ article {
 
 <script>
 var mapCanvas = document.getElementById("map");  
- //$('#location').editableSelect();
-var myCenter=new google.maps.LatLng(-37.80981786,144.9298811);
-var mapOptions = {center: myCenter, zoom: 13};
+//$('#location').editableSelect();
+var myCenter=new google.maps.LatLng(-37.8316757,144.9196343);
+var mapOptions = {center: myCenter, zoom: 15};
 var map = new google.maps.Map(mapCanvas, mapOptions);
 var geocoder = new google.maps.Geocoder;
- var infowindow1 = new google.maps.InfoWindow;
+var infowindow1 = new google.maps.InfoWindow;
 //Zone1 Boundaries
-
-var z1b1=new google.maps.LatLng(-37.80866507,	144.9180365);
-var z1b2=new google.maps.LatLng(-37.80981786, 144.9298811);
-var z1b3=new google.maps.LatLng(-37.81449664,	144.9286366);
-var z1b4=new google.maps.LatLng(-37.81673421,	144.917264);
-var vic3000 = new google.maps.Polygon({
-    path: [z1b1, z1b2, z1b3, z1b4],
-    strokeColor: "green",
-    strokeOpacity: 0.8,
-    strokeWeight: 2,
-    fillColor: "green",
-    fillOpacity: 0.4
-  });
-//Zone 2 boundaries
-
-var z2b1=new google.maps.LatLng(-37.8098178582854,	144.929881095886);
-var z2b2=new google.maps.LatLng(-37.8050370609216, 144.944515228271);
-var z2b3=new google.maps.LatLng(-37.814327121061,	144.942970275878);
-var z2b4=new google.maps.LatLng(-37.8169376210025,	144.931426048278);
-
-  
-var vic3004 = new google.maps.Polygon({
-    path: [z2b1, z2b2, z2b3, z2b4],
-    strokeColor: "green",
-    strokeOpacity: 0.8,
-    strokeWeight: 2,
-    fillColor: "green",
-    fillOpacity: 0.4
-  });
-  
-  
-vic3000.setMap(map);
-vic3004.setMap(map);
+var lowFlowLL=[];
+var highFlowLL=[];
+var contUsageLL=[];
+var reverseFlowLL=[];
+var emptyPipeLL=[];
+var highPressureLL=[];
+var nwLeakLL=[];
+var lowTempLL=[];
+var highTempLL=[];
+var vibHotLL=[];
 
 
 var socket = io();
 
 socket.on('newMsg', function(data){
-//alert(JSON.stringify(data));
+
+
+if(data.lowFlowAlarm==1)
+	lowFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+if(data.highFlowAlarm==1)
+	highFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+if(data.continuousUsageAlarm==1)
+	contUsageLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+if(data.reverseFlowAlarm==1)
+	reverseFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+if(data.emptyPipeAlarm==1)
+	emptyPipeLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+if(data.highPressureAlarm==1)
+	highPressureLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+if(data.networkLeakAlarm==1)
+	nwLeakLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+if(data.lowTemperatureAlarm==1)
+	lowTempLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+if(data.highTemperatureAlarm==1)
+	highTempLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+if(data.vibrationHotspotAlarm==1)
+	vibHotLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
 markOnMap(data);
 });
   
+function applyFilter(arrayName,thisObj)
+{
+	var arrLL=eval(arrayName);
+
+	if(thisObj.checked)
+	{
+	for(var i=0; i<arrLL.length;i++)
+	{
+		var ll=arrLL[i];
+		var meterLoc=new google.maps.LatLng(ll.lattitude,ll.longitude);
+		var marker = new google.maps.Marker({position:meterLoc,icon: 'filtericon/'});
+		marker.setMap(map);
+	}
+	}
+	else
+	{
+		for(var i=0; i<arrLL.length;i++)
+		{
+			var ll=arrLL[i];
+			var meterLoc=new google.maps.LatLng(ll.lattitude,ll.longitude);
+			var marker = new google.maps.Marker({position:meterLoc,icon: 'healthicon/'+ll.leakreason});
+			marker.setMap(map);
+		}
+	}
+}
 
 function markOnMap(data) {
 
-  var meterLoc=new google.maps.LatLng(data.long,data.latt);
-  var marker = new google.maps.Marker({position:meterLoc, icon: 'healthicon/'+data.leak});
+  var meterLoc=new google.maps.LatLng(data.lattitude,data.longitude);
+  var marker = new google.maps.Marker({position:meterLoc, icon: 'healthicon/'+data.leakreason});
   marker.setMap(map);
   google.maps.event.addListener(map, 'zoom_changed', function() {
     var zoom = map.getZoom();
@@ -218,28 +257,23 @@ function markOnMap(data) {
     }
 });
   
-  
-  if(data.leak>50)
-	{
-		var affectedZone=eval(data.pin);
-		affectedZone.setOptions({strokeWeight: 2.0, fillColor: 'red'});
-	}
 	google.maps.event.addListener(marker, 'click', function(event) {
 		placeMarker(map, data, marker);
 	});
 }
 
 function placeMarker(map, data, marker) {
+
   var infowindow = new google.maps.InfoWindow({
-    content: '<div>Latitude: ' + data.latt + '<br>Longitude: ' + data.long + '<br>Leak Probability: <b>' + data.leak + '% </b> <a href="#" onClick="sendAlert("");"> Action </a> <button id="detLnk" onClick="showCustomerDetails(\''+data.deviceid+'\');">Details</button></div>'
+    content: '<div>Customer Name: ' + data.customer_name + '<br>Longitude: ' + data.deviceId + '<br>Location: ' 
+	+ data.street_name + ' <br> Last Maintainance Date : '+ 
+	data.last_maintance_date+'<br>Leak Reason: '+data.leakreason+'<br><a href="#" onClick="sendAlert("");"> Action </a> <button id="detLnk" onClick="showCustomerDetails(\''+data.deviceId+'\');">Details</button></div>'
   });
   infowindow.open(map,marker);
 }
 
    function geocodeLatLng(value) {
-        
-        var latlngStr = value.substr(7).split(',', 2);
-
+        var latlngStr = value.split(',', 2);
         var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
         geocoder.geocode({'location': latlng}, function(results, status) {
           if (status === 'OK') {
@@ -286,13 +320,13 @@ function showCustomerDetails(propId) {
 	
 	$.ajax({url: "/getcustomerdetails/"+propId, success: function(result)
 	{
-	
-		var custIdDiv=result[0].customerID;
-		var custNmeDiv=result[0].customerName;
-		var locDiv=result[0].location;
-		var billDteDiv=result[0].billPaymentDate;
-		var pydueDiv=result[0].billPaymentDueDate;
-		var lstmaintDiv=result[0].lastMaintanceDate;
+		//alert(JSON.stringify(result));
+		var custIdDiv=result[0].customer_id;
+		var custNmeDiv=result[0].customer_name;
+		var locDiv=result[0].street_name;
+		var billDteDiv=result[0].bill_payment_date;
+		var pydueDiv=result[0].bill_payment_due_date;
+		var lstmaintDiv=result[0].last_maintance_date;
 		document.getElementById("custIdDiv").innerHTML=custIdDiv;
 		document.getElementById("custNmeDiv").innerHTML=custNmeDiv;
 		document.getElementById("locDiv").innerHTML=locDiv;
@@ -304,10 +338,10 @@ function showCustomerDetails(propId) {
 		for(var i=0; i<result.length;i++)
 		{
 				var x = result[i];
-				var y = {"label":x.billPaymentDate.replace("T00:00:00.000Z",""),"Bill Amount":x.billAmount,"Fine Amount": x.fineAmount, "Total Bill Amount": x.totalAmountPaid};
+				var y = {"label":x.bill_payment_date.replace("T00:00:00.000Z",""),"Bill Amount":x.bill_amount,"Fine Amount": x.fine_amount, "Total Bill Amount": x.total_amount_paid};
 				billArray.push(y);
-				var month = monthResolver(x.billPaymentDate.replace("T00:00:00.000Z",""));
-				var z = {"letter":month,"frequency":x.consumedQuantity}
+				var month = monthResolver(x.bill_payment_date.replace("T00:00:00.000Z",""));
+				var z = {"letter":month,"frequency":x.consumed_quantity_ltr}
 				consumptionData.push(z);
 		}
 		modal.style.display = "block";
@@ -347,23 +381,28 @@ window.onclick = function(event) {
 }
 
 //Angular JS
-angular.module('sewApp', [])
+angular.module('sewApp', ['angucomplete-alt'])
 .controller('sewCtrl', function($scope, $http) {
+	 
     $http.get('/getsewloc').
         then(function(response) {
-			
 			var meterDropData = [];
 			for(var i=0; i< response.data.length;i++)
 			{
 				var res = response.data[i]; 
-				var key = res.lattitude + ',' + res.longitude  ;
-				var value=  res.location ;
+				var key = res.Lattitude + ',' + res.Longitude  ;
+				var value=  res.street_name ;
 				var obj = {};
-				obj[key] = value;
+				obj.key = key;
+				obj.value = value;
 				meterDropData.push(obj);
 			}
-			
+			$scope.selectedMeter = {};
             $scope.meterdrop = meterDropData;
+			
+			$scope.onChangeMeter=function(val){
+			geocodeLatLng(val.description.key);
+			}
         });
 });
 

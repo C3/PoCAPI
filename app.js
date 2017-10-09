@@ -26,11 +26,19 @@ app.get('/', function(req, res) {
 app.get('/healthicon/:leak', function(req,res){
 var leak = req.params.leak;
 	console.log("Leak Probability ::: " + leak);
-	if(leak>50)
+	if(leak!="null")
+	{
            res.sendFile(path.join(__dirname + '/public/images/red.png'));
+	}
 	else
+	{
 	   res.sendFile(path.join(__dirname + '/public/images/yellow.png'));
-	
+	}
+});
+
+app.get('/filtericon/', function(req,res){
+
+	   res.sendFile(path.join(__dirname + '/public/images/blue.png'));
 });
 
 app.get('/js/:jsFile', function(req,res){
