@@ -4,7 +4,7 @@ var path = require('path');
 var io = require('socket.io')(http);
 var stringify = require('node-stringify');
 const sql = require('mssql'); 
-//DB config
+//DB config connecting to the remote server
 const dbconfig =    {
      user: 'seqsqladmin', // update me
      password: 'Pa$$w0rd098', // update me
