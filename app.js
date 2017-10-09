@@ -41,7 +41,7 @@ app.get('/getsewloc', function(req,res){
 		sql.connect(dbconfig)
 		.then(function() {
 		 const request = new sql.Request()
-				request.query('select distinct sdl.[Lattitude],sdl.[Longitude], sct.[street_name] from dbo.sew_device_loc sdl, [dbo].[CRM_Data] crm where sdl.deviceData=crm.property_id', (err, result) => {
+				request.query('select distinct sdl.[Lattitude],sdl.[Longitude], sct.[street_name] from sewsql01.sew_device_loc sdl, [dbo].[CRM_Data] crm where sdl.deviceData=crm.property_id', (err, result) => {
 				if(err)
 					console.log(err);
 					else{
