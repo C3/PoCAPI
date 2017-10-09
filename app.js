@@ -38,14 +38,12 @@ app.get('/js/:jsFile', function(req,res){
 });
 
 app.get('/getsewloc', function(req,res){
-		sql.connect(dbconfig)
+		sql.connect(config)
 		.then(function() {
 		 const request = new sql.Request()
 				request.execute('dbo.SP_GET_SEW_LOC', (err, result) => {
-				if(err)
-					console.log(err); // 
-				else
-					res.send(result);
+					console.log(result.recordset); // 
+					res.send(result.recordset);
 					sql.close();
 				});
 		})
@@ -53,6 +51,53 @@ app.get('/getsewloc', function(req,res){
 		  console.log(err);
 		});
 });
+
+app.get('/getcustomerdetails/:meterId', function(req,res){
+		sql.connect(config)
+		.then(function() {
+		 const request = new sql.Request();
+		 var meterId = req.params.meterId;
+		 request.input('prop_id', sql.VarChar(50), meterId);
+				request.execute('dbo.SP_GET_SEW_CUSTOMER_DETAILS_BY_PROPID', (err, result) => {
+					console.log(result.recordset); // 
+					res.send(result.recordset);
+					sql.close();
+				});
+		})
+		.catch(function(err) {
+		  console.log(err);
+		});
+});
+
+app.get('/getbillingdetails/:custId', function(req,res){
+		sql.connect(config)
+		.then(function() {
+		 const request = new sql.Request();
+		 var custId = req.params.custId;
+		 request.input('cust_id', sql.VarChar(50), custId);
+				request.execute('dbo.SP_GET_SEW_BILLING_DETAILS_BY_USTID', (err, result) => {
+					console.log(result.recordset); // 
+					res.send(result.recordset);
+					sql.close();
+				});
+		})
+		.catch(function(err) {
+		  console.log(err);
+		});
+});
+
+
+app.get('/sendsms/:mobileNumber', function(req,res){
+var toMobileNumer = req.params.mobileNumber;
+twilioclient.messages.create({
+  from: "3213253112",
+  to:toMobileNumer,
+  body: "Hello world from Node JS SEW App"
+}).then((messsage) => console.log(message.sid));
+});
+
+//SOCKET IO on
+
 io.on('connection', function(socket) {
 	console.log('user disconnected');
 	socket.on('disconnect', function(){
