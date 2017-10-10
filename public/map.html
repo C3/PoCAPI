@@ -265,7 +265,7 @@ function markOnMap(data) {
 function placeMarker(map, data, marker) {
 
   var infowindow = new google.maps.InfoWindow({
-    content: '<div>Customer Name: ' + data.customer_name + '<br>Longitude: ' + data.deviceId + '<br>Location: ' 
+    content: '<div>Customer Name: ' + data.customer_name + '<br>Device ID: ' + data.deviceId + '<br>Location: ' 
 	+ data.street_name + ' <br> Last Maintainance Date : '+ 
 	data.last_maintance_date+'<br>Leak Reason: '+data.leakreason+'<br><a href="#" onClick="sendAlert("");"> Action </a> <button id="detLnk" onClick="showCustomerDetails(\''+data.deviceId+'\');">Details</button></div>'
   });
