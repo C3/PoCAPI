@@ -108,6 +108,7 @@ article {
 <body>
 
 <div class="container" ng-app="sewApp" ng-controller="sewCtrl">
+
 	<nav>
 	  <ul>
 	  <li><b>Meter Location Filter</b></li>
@@ -186,37 +187,40 @@ var vibHotLL=[];
 
 
 var socket = io();
-
+var dataDeviceMap={};
 socket.on('newMsg', function(data){
+
+dataDeviceMap[data.lattitude]=data;
 
 
 if(data.lowFlowAlarm==1)
-	lowFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+	lowFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
 if(data.highFlowAlarm==1)
-	highFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+	highFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
 if(data.continuousUsageAlarm==1)
-	contUsageLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+	contUsageLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
 if(data.reverseFlowAlarm==1)
-	reverseFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+	reverseFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
 if(data.emptyPipeAlarm==1)
-	emptyPipeLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+	emptyPipeLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
 if(data.highPressureAlarm==1)
-	highPressureLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+	highPressureLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
 if(data.networkLeakAlarm==1)
-	nwLeakLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+	nwLeakLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
 if(data.lowTemperatureAlarm==1)
-	lowTempLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+	lowTempLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
 if(data.highTemperatureAlarm==1)
-	highTempLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+	highTempLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
 if(data.vibrationHotspotAlarm==1)
-	vibHotLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason});
+	vibHotLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
 markOnMap(data);
+
 });
   
 function applyFilter(arrayName,thisObj)
 {
 	var arrLL=eval(arrayName);
-
+	
 	if(thisObj.checked)
 	{
 	for(var i=0; i<arrLL.length;i++)
@@ -225,6 +229,11 @@ function applyFilter(arrayName,thisObj)
 		var meterLoc=new google.maps.LatLng(ll.lattitude,ll.longitude);
 		var marker = new google.maps.Marker({position:meterLoc,icon: 'filtericon/'});
 		marker.setMap(map);
+		google.maps.event.addListener(marker, 'click', function(event) {
+		var data = dataDeviceData(this.position.lat());
+			placeMarker(map, data, this);
+		});
+		
 	}
 	}
 	else
@@ -235,8 +244,18 @@ function applyFilter(arrayName,thisObj)
 			var meterLoc=new google.maps.LatLng(ll.lattitude,ll.longitude);
 			var marker = new google.maps.Marker({position:meterLoc,icon: 'healthicon/'+ll.leakreason});
 			marker.setMap(map);
+			google.maps.event.addListener(marker, 'click', function(event) {
+			var data = dataDeviceData(this.position.lat());
+			placeMarker(map, data, this);
+			});
+			
 		}
 	}
+}
+
+function dataDeviceData(key)
+{
+	return dataDeviceMap[key]
 }
 
 function markOnMap(data) {
@@ -263,11 +282,11 @@ function markOnMap(data) {
 }
 
 function placeMarker(map, data, marker) {
-
+//alert(JSON.stringify(data));
   var infowindow = new google.maps.InfoWindow({
     content: '<div>Customer Name: ' + data.customer_name + '<br>Device ID: ' + data.deviceId + '<br>Location: ' 
 	+ data.street_name + ' <br> Last Maintainance Date : '+ 
-	data.last_maintance_date+'<br>Leak Reason: '+data.leakreason+'<br><a href="#" onClick="sendAlert("");"> Action </a> <button id="detLnk" onClick="showCustomerDetails(\''+data.deviceId+'\');">Details</button></div>'
+	data.last_maintance_date.replace("T00:00:00.000Z","") +'<br>Leak Reason: '+data.leakreason+'<br><a href="#" onClick="sendAlert("");"> Action </a> <button id="detLnk" onClick="showCustomerDetails(\''+data.deviceId+'\');">Details</button></div>'
   });
   infowindow.open(map,marker);
 }
