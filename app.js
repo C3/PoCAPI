@@ -23,6 +23,28 @@ app.get('/', function(req, res) {
    res.sendFile(path.join(__dirname + '/public/map.html'));
 });
 
+//REST end points
+app.get('/devices', function(req, res) {
+	sql.connect(dbconfig)
+	.then(function() {
+	 const request = new sql.Request()
+	 request.query('select * from dbo.propertyData prop, [dbo].[CRM_Data] crm where prop.eventTime=(select max(prop2.eventTime) from dbo.propertyData prop2 where prop.deviceId = prop2.deviceId) and prop.deviceId= crm.property_id ', (err, result) => {
+			if(err)
+				console.log(err);
+			else {
+				console.log(result.recordset); // 
+					res.send(result.recordset);
+				}
+				sql.close();
+			});
+			
+			
+	})
+	.catch(function(err) {
+	  console.log(err);
+	});
+});
+
 app.get('/healthicon/:leak', function(req,res){
 var leak = req.params.leak;
 	console.log("Leak Probability ::: " + leak);

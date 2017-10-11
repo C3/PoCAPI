@@ -190,7 +190,6 @@ var socket = io();
 var dataDeviceMap={};
 
 function setDevices (devices) {
-    alert(devices);
 	devices.forEach( function (data) {
 		dataDeviceMap[data.lattitude] = data;
 		
@@ -527,7 +526,6 @@ var g = svg.append("g")
 }
 
 $.ajax({url: "/devices", success: function(result){
-        alert('here');
         setDevices(result);
     }});
 
