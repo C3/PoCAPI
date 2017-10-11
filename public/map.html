@@ -191,7 +191,7 @@ var dataDeviceMap={};
 
 function setDevices (devices) {
 	devices.forEach( function (data) {
-		dataDeviceMap[data.lattitude] = data;
+		dataDeviceMap[data.deviceId] = data;
 		
 		if(data.lowFlowAlarm==1)
 			lowFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
@@ -218,8 +218,10 @@ function setDevices (devices) {
 }
 
 socket.on('newMsg', function(data){
-
-	dataDeviceMap[data.lattitude]=data;
+	
+	var device = dataDeviceMap[data.deviceId];
+	
+	device.leakreason = data.leakreason;
 	
 	if(data.lowFlowAlarm==1)
 		lowFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
@@ -242,6 +244,8 @@ socket.on('newMsg', function(data){
 	if(data.vibrationHotspotAlarm==1)
 		vibHotLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
 	markOnMap(data);
+	
+	dataDeviceMap[data.deviceId] = device;
 
 });
   
