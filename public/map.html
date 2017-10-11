@@ -188,32 +188,61 @@ var vibHotLL=[];
 
 var socket = io();
 var dataDeviceMap={};
+
+function setDevices (devices) {
+    alert(devices);
+	devices.forEach( function (data) {
+		dataDeviceMap[data.lattitude] = data;
+		
+		if(data.lowFlowAlarm==1)
+			lowFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+		if(data.highFlowAlarm==1)
+			highFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+		if(data.continuousUsageAlarm==1)
+			contUsageLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+		if(data.reverseFlowAlarm==1)
+			reverseFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+		if(data.emptyPipeAlarm==1)
+			emptyPipeLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+		if(data.highPressureAlarm==1)
+			highPressureLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+		if(data.networkLeakAlarm==1)
+			nwLeakLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+		if(data.lowTemperatureAlarm==1)
+			lowTempLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+		if(data.highTemperatureAlarm==1)
+			highTempLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+		if(data.vibrationHotspotAlarm==1)
+			vibHotLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+		markOnMap(data);
+	});
+}
+
 socket.on('newMsg', function(data){
 
-dataDeviceMap[data.lattitude]=data;
-
-
-if(data.lowFlowAlarm==1)
-	lowFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
-if(data.highFlowAlarm==1)
-	highFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
-if(data.continuousUsageAlarm==1)
-	contUsageLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
-if(data.reverseFlowAlarm==1)
-	reverseFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
-if(data.emptyPipeAlarm==1)
-	emptyPipeLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
-if(data.highPressureAlarm==1)
-	highPressureLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
-if(data.networkLeakAlarm==1)
-	nwLeakLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
-if(data.lowTemperatureAlarm==1)
-	lowTempLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
-if(data.highTemperatureAlarm==1)
-	highTempLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
-if(data.vibrationHotspotAlarm==1)
-	vibHotLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
-markOnMap(data);
+	dataDeviceMap[data.lattitude]=data;
+	
+	if(data.lowFlowAlarm==1)
+		lowFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+	if(data.highFlowAlarm==1)
+		highFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+	if(data.continuousUsageAlarm==1)
+		contUsageLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+	if(data.reverseFlowAlarm==1)
+		reverseFlowLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+	if(data.emptyPipeAlarm==1)
+		emptyPipeLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+	if(data.highPressureAlarm==1)
+		highPressureLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+	if(data.networkLeakAlarm==1)
+		nwLeakLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+	if(data.lowTemperatureAlarm==1)
+		lowTempLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+	if(data.highTemperatureAlarm==1)
+		highTempLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+	if(data.vibrationHotspotAlarm==1)
+		vibHotLL.push({lattitude:data.lattitude,longitude:data.longitude,leakreason:data.leakreason,deviceid:data.deviceId});
+	markOnMap(data);
 
 });
   
@@ -259,7 +288,6 @@ function dataDeviceData(key)
 }
 
 function markOnMap(data) {
-
   var meterLoc=new google.maps.LatLng(data.lattitude,data.longitude);
   var marker = new google.maps.Marker({position:meterLoc, icon: 'healthicon/'+data.leakreason});
   marker.setMap(map);
@@ -497,6 +525,11 @@ var g = svg.append("g")
 .attr("cy", function(d) { return y(d.frequency); })
 .attr("r", 4);
 }
+
+$.ajax({url: "/devices", success: function(result){
+        alert('here');
+        setDevices(result);
+    }});
 
 </script>
 <!--
