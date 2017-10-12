@@ -423,7 +423,7 @@
 	var markerImageFilter = new google.maps.MarkerImage(imageUrlDuringFilter,
         new google.maps.Size(24, 32));
 	
-	var socket = io.connect('http://localhost:3000');
+	var socket = io.connect('http://sewwad001-api.azurewebsites.net/');
 	
 	socket.on('newMsg', function(data){
 			
