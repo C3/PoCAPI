@@ -145,7 +145,7 @@ twilioclient.messages.create({
 //SOCKET IO on
 
 io.on('connection', function(socket) {
-	console.log('user disconnected');
+	
 	socket.on('disconnect', function(){
 		console.log('user disconnected');
 		  socket.removeAllListeners('disconnect');

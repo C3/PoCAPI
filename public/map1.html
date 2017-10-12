@@ -424,7 +424,7 @@
         new google.maps.Size(24, 32));
 	
 	var socket = io.connect('http://sewwad001-api.azurewebsites.net:80');
-	
+	//var socket = io.connect('http://localhost:3000');
 	socket.on('newMsg', function(data){
 			
 		var device = dataLattMap[data.deviceid];		
@@ -627,12 +627,10 @@
 	
 	
 	function refreshEventInfo(eventData) {
-    	console.log(eventData);
-        
+    	        
             var latLng = new google.maps.LatLng(eventData.lattitude, eventData.longitude);
 			if( eventData.leakreason == 'null' )
 			{
-				console.log('print inside null loop');
 				var safemarker = new google.maps.Marker({
 					position: latLng,
 					draggable: true,
@@ -647,17 +645,18 @@
 			}
 			else
 			{
-				console.log('inside else area to check leak');
-				console.log(eventData.leakreason);
+				
+				
 				var damagemarker = new google.maps.Marker({
                 position: latLng,
                 draggable: true,
                 icon: markerImageLeak
 				});
 				
-				google.maps.event.addListener(damagemarkers, 'click', function(event) {
+				google.maps.event.addListener(damagemarker, 'click', function(event) {
                 var data = dataDeviceMap[this.position.lat()];
-                placeMarker(map, data, this, null);
+                
+                placeMarker(map, data, this, eventData.leakreason);
             });
 				damagemarker.setMap(map);
 		

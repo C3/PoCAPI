@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "azure-event-hubs": "0.0.8",
+    "azure-iothub": "1.1.17",
     "body-parser": "^1.18.2",
     "csv-parse": "^1.2.3",
     "edge": "^7.10.1",
