@@ -1,0 +1,965 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>MarkerClusterer SEW test</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 10px 20px 20px;
+            font-family: Arial;
+            font-size: 16px;
+        }
+        
+        #map-container {
+            padding: 6px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: #ccc #ccc #999 #ccc;
+            -webkit-box-shadow: rgba(64, 64, 64, 0.5) 0 2px 5px;
+            -moz-box-shadow: rgba(64, 64, 64, 0.5) 0 2px 5px;
+            box-shadow: rgba(64, 64, 64, 0.1) 0 2px 5px;
+            width: 800px;
+        }
+        
+        #map {
+            width: 800px;
+            height: 400px;
+        }
+        
+        #actions {
+            list-style: none;
+            padding: 0;
+        }
+        
+        #inline-actions {
+            padding-top: 10px;
+        }
+        
+        .item {
+            display: none;
+            margin-left: 20px;
+        }
+        
+        div.container {
+            width: 100%;
+            border: 1px solid gray;
+        }
+        
+        header,
+        footer {
+            padding: 1em;
+            color: white;
+            background-color: black;
+            clear: left;
+            text-align: center;
+        }
+        
+        nav {
+            float: left;
+            max-width: 200px;
+            margin: 0;
+            padding: 1em;
+        }
+        
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        nav ul a {
+            text-decoration: none;
+        }
+        
+        article {
+            margin-left: 170px;
+            border-left: 1px solid gray;
+            padding: 1em;
+            overflow: hidden;
+        }
+        /* The Modal (background) */
+        
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            padding-top: 100px;
+            /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+        /* Modal Content */
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 60%;
+        }
+        /* The Close Button */
+        
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .bar {
+            fill: steelblue;
+        }
+        
+        .bar:hover {
+            fill: brown;
+        }
+        
+        .axis--x path {
+            display: none;
+        }
+        
+        .line {
+            fill: none;
+            stroke: steelblue;
+            stroke-width: 3px;
+        }
+        
+        .circle {
+            fill: steelblue;
+        }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAASEH7D3aS1dCiw2llNZqE8z70mQjIwQ8"></script>
+    <script type="text/javascript" src="/js/markerclusterer.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angucomplete-alt/2.4.1/angucomplete-alt.min.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="/js/barChart.js"></script>
+</head>
+
+<body>
+    <h3>Sew Water</h3>
+    <div class="container" ng-app="sewApp" ng-controller="sewCtrl">
+        <nav>
+            <ul>
+                <li><b>Search by DeviceId or Region</b></li>
+                <li>&nbsp;</li>
+                <li>
+
+                    <angucomplete-alt id="ex1" placeholder="Search..." selected-object="onChangeMeter" local-data="meterdrop" search-fields="key,value" title-field="value" minlength="1" inputclass="form-control form-control-small" match-class="highlight" />
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <input type="checkbox" onchange="applyFilter('lowFlowLL',this);" />Low Flow Alarm</li>
+            </ul>
+            <ul>
+                <li>
+                    <input type="checkbox" onchange="applyFilter('highFlowLL',this);" />High Flow Alarm</li>
+            </ul>
+            <ul>
+                <li>
+                    <input type="checkbox" onchange="applyFilter('contUsageLL',this);" />Cont. Usage Alarm</li>
+            </ul>
+            <ul>
+                <li>
+                    <input type="checkbox" onchange="applyFilter('reverseFlowLL',this);" />Reverse Flow Alarm</li>
+            </ul>
+            <ul>
+                <li>
+                    <input type="checkbox" onchange="applyFilter('emptyPipeLL',this);" />Empty Pipe</li>
+            </ul>
+            <ul>
+                <li>
+                    <input type="checkbox" onchange="applyFilter('highPressureLL',this);" />High Pressure Alarm</li>
+            </ul>
+            <ul>
+                <li>
+                    <input type="checkbox" onchange="applyFilter('nwLeakLL',this);" />Network Leak</li>
+            </ul>
+            <ul>
+                <li>
+                    <input type="checkbox" onchange="applyFilter('lowTempLL',this);" />Low Temperature</li>
+            </ul>
+            <ul>
+                <li>
+                    <input type="checkbox" onchange="applyFilter('highTempLL',this);" />High Temperature</li>
+            </ul>
+            <ul>
+                <li>
+                    <input type="checkbox" onchange="applyFilter('vibHotLL',this);" />Vibration Hotspot</li>
+            </ul>
+        </nav>
+
+        <article>
+            <div id="map" style="width:100%;height:550px;"></div>
+        </article>
+    </div>
+    <div id="detModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <table style="font-family:arial;">
+                <tr>
+                    <td>
+                        <table border="1px;">
+                            <th colspan="2" bgcolor="#9acd32">Customer Details</th>
+                            <tr>
+                                <td style="width:65%;">Customer ID</td>
+                                <td style="width:35%;">
+                                    <div id="custIdDiv"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:65%;">Customer name</td>
+                                <td style="width:35%;">
+                                    <div id="custNmeDiv"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:65%;">Location</td>
+                                <td style="width:35%;">
+                                    <div id="locDiv"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:65%;">Bill Payment Date</td>
+                                <td style="width:35%;">
+                                    <div id="billDteDiv"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:65%;">Bill Payment Due Date</td>
+                                <td style="width:35%;">
+                                    <div id="pydueDiv"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:65%;">Last Maintenance Date</td>
+                                <td style="width:35%;">
+                                    <div id="lstmaintDiv"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <th>Last 3 Month Consumption Trend</th>
+                            <tr>
+                                <td>
+                                    <div id="svgDiv">
+                                        <svg width="460" height="300">
+                                        </svg>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="width:100%;"><b>Last 3 Month Bill Details</b></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="width:100%;">
+                        <div id="billChart">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <div id="inline-actions">
+
+        <input id="refresh" type="button" value="Refresh Map" class="item" />
+
+    </div>
+</body>
+<script>
+    var socket = io();
+    var styles = [
+        [{
+            url: '/images/people35.png',
+            height: 35,
+            width: 35,
+            anchor: [16, 0],
+            textColor: '#ff00ff',
+            textSize: 10
+        }, {
+            url: '/images/people45.png',
+            height: 45,
+            width: 45,
+            anchor: [24, 0],
+            textColor: '#ff0000',
+            textSize: 11
+        }, {
+            url: '/images/people55.png',
+            height: 55,
+            width: 55,
+            anchor: [32, 0],
+            textColor: '#ffffff',
+            textSize: 12
+        }],
+        [{
+            url: '/images/conv30.png',
+            height: 27,
+            width: 30,
+            anchor: [3, 0],
+            textColor: '#ff00ff',
+            textSize: 10
+        }, {
+            url: '/images/conv40.png',
+            height: 36,
+            width: 40,
+            anchor: [6, 0],
+            textColor: '#ff0000',
+            textSize: 11
+        }, {
+            url: '/images/conv50.png',
+            width: 50,
+            height: 45,
+            anchor: [8, 0],
+            textSize: 12
+        }],
+        [{
+            url: '/images/heart30.png',
+            height: 26,
+            width: 30,
+            anchor: [4, 0],
+            textColor: '#ff00ff',
+            textSize: 10
+        }, {
+            url: '/images/heart40.png',
+            height: 35,
+            width: 40,
+            anchor: [8, 0],
+            textColor: '#ff0000',
+            textSize: 11
+        }, {
+            url: '/images/heart50.png',
+            width: 50,
+            height: 44,
+            anchor: [12, 0],
+            textSize: 12
+        }],
+        [{
+            url: '/images/pin.png',
+            height: 48,
+            width: 30,
+            anchor: [-18, 0],
+            textColor: '#ffffff',
+            textSize: 10,
+            iconAnchor: [15, 48]
+        }]
+    ];
+    var markerClusterer = null;
+    var map = null;
+    var geocoder = null;
+    var imageUrlHealthy = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&' +
+        'chco=FFFFFF,008CFF,000000&ext=.png';
+    var imageUrlDuringLeak = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&' +
+        'chco=FFFFFF,c1392b,000000&ext=.png';
+	var imageUrlDuringFilter = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&' +
+        'chco=FFFFFF,007936,000000&ext=.png';
+	//filter data array
+    var dataDeviceMap = {};
+    var dataLattMap = {};
+    var leakLattitudes = {};
+    var lowFlowLL = [];
+    var highFlowLL = [];
+    var contUsageLL = [];
+    var reverseFlowLL = [];
+    var emptyPipeLL = [];
+    var highPressureLL = [];
+    var nwLeakLL = [];
+    var lowTempLL = [];
+    var highTempLL = [];
+    var vibHotLL = [];
+    var tamperLL=[];
+	
+	//filter marker array
+	
+    
+    var lowFlowLLMarkers = [];
+    var highFlowLLMarkers = [];
+    var contUsageLLMarkers = [];
+    var reverseFlowLLMarkers = [];
+    var emptyPipeLLMarkers = [];
+    var highPressureLLMarkers = [];
+    var nwLeakLLMarkers = [];
+    var lowTempLLMarkers = [];
+    var highTempLLMarkers = [];
+    var vibHotLLMarkers = [];
+	
+    var markerImageHealthy = new google.maps.MarkerImage(imageUrlHealthy,
+        new google.maps.Size(24, 32));
+    var markerImageLeak = new google.maps.MarkerImage(imageUrlDuringLeak,
+        new google.maps.Size(24, 32));
+	var markerImageFilter = new google.maps.MarkerImage(imageUrlDuringFilter,
+        new google.maps.Size(24, 32));
+	
+	var socket = io.connect('http://localhost:3000');
+	
+	socket.on('newMsg', function(data){
+			
+		var device = dataLattMap[data.deviceid];		
+		var devicelat = dataDeviceMap[device.lattitude];
+		console.log(devicelat.deviceId);
+		console.log(data.leakreason);
+		devicelat.leakreason = data.leakreason;
+			
+		if(data.lowFlowAlarm==1)
+			lowFlowLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
+		if(data.highFlowAlarm==1)
+			highFlowLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
+		if(data.continuousUsageAlarm==1)
+			contUsageLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
+		if(data.reverseFlowAlarm==1)
+			reverseFlowLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
+		if(data.emptyPipeAlarm==1)
+			emptyPipeLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
+		if(data.highPressureAlarm==1)
+			highPressureLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
+		if(data.networkLeakAlarm==1)
+			nwLeakLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
+		if(data.lowTemperatureAlarm==1)
+			lowTempLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
+		if(data.highTemperatureAlarm==1)
+			highTempLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
+		if(data.vibrationhotspotalarm==1)
+			vibHotLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
+		if(data.tamperalarm==1)
+			tamperLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});	
+		dataDeviceMap[device.lattitude] = devicelat;
+		
+		refreshEventInfo(devicelat);
+		
+		
+
+	});
+	
+	var safemarkers = [];
+	var damagemarkers = [];
+   
+	function refreshMap(masterData) {
+    	
+        
+        for (var key in masterData) {
+            var data = masterData[key];
+            dataDeviceMap[data.lattitude] = data;
+            dataLattMap[data.deviceId] = data;
+            //Filter data push
+            if (data.lowFlowAlarm == 1) {
+                lowFlowLL.push({
+                    lattitude: data.lattitude,
+                    longitude: data.longitude,
+                    leakreason: data.leakreason,
+                    deviceid: data.deviceId
+                });
+                
+            }
+            if (data.highFlowAlarm == 1) {
+                highFlowLL.push({
+                    lattitude: data.lattitude,
+                    longitude: data.longitude,
+                    leakreason: data.leakreason,
+                    deviceid: data.deviceId
+                });
+                
+            }
+            if (data.continuousUsageAlarm == 1) {
+                contUsageLL.push({
+                    lattitude: data.lattitude,
+                    longitude: data.longitude,
+                    leakreason: data.leakreason,
+                    deviceid: data.deviceId
+                });
+                
+            }
+            if (data.reverseFlowAlarm == 1) {
+                reverseFlowLL.push({
+                    lattitude: data.lattitude,
+                    longitude: data.longitude,
+                    leakreason: data.leakreason,
+                    deviceid: data.deviceId
+                });
+                
+            }
+            if (data.emptyPipeAlarm == 1) {
+                emptyPipeLL.push({
+                    lattitude: data.lattitude,
+                    longitude: data.longitude,
+                    leakreason: data.leakreason,
+                    deviceid: data.deviceId
+                });
+                
+            }
+            if (data.highPressureAlarm == 1) {
+                highPressureLL.push({
+                    lattitude: data.lattitude,
+                    longitude: data.longitude,
+                    leakreason: data.leakreason,
+                    deviceid: data.deviceId
+                });
+                
+            }
+            if (data.networkLeakAlarm == 1) {
+                nwLeakLL.push({
+                    lattitude: data.lattitude,
+                    longitude: data.longitude,
+                    leakreason: data.leakreason,
+                    deviceid: data.deviceId
+                });
+                
+            }
+            if (data.lowTemperatureAlarm == 1) {
+                lowTempLL.push({
+                    lattitude: data.lattitude,
+                    longitude: data.longitude,
+                    leakreason: data.leakreason,
+                    deviceid: data.deviceId
+                });
+                
+            }
+            if (data.highTemperatureAlarm == 1) {
+                highTempLL.push({
+                    lattitude: data.lattitude,
+                    longitude: data.longitude,
+                    leakreason: data.leakreason,
+                    deviceid: data.deviceId
+                });
+                
+            }
+            if (data.vibrationHotspotAlarm == 1) {
+                vibHotLL.push({
+                    lattitude: data.lattitude,
+                    longitude: data.longitude,
+                    leakreason: data.leakreason,
+                    deviceid: data.deviceId
+                });
+                
+            }
+            var latLng = new google.maps.LatLng(data.lattitude, data.longitude)
+			if( data.leakreason == null )
+			{
+				
+				var safemarker = new google.maps.Marker({
+					position: latLng,
+					draggable: true,
+					icon: markerImageHealthy
+				});
+				safemarkers.push(safemarker);
+				google.maps.event.addListener(safemarker, 'click', function(event) {
+                var data = dataDeviceMap[this.position.lat()];
+                placeMarker(map, data, this, null);
+            });
+			}
+			else
+			{
+				var damagemarker = new google.maps.Marker({
+                position: latLng,
+                draggable: true,
+                icon: markerImageLeak
+				});
+				damagemarkers.push(damagemarker);
+				google.maps.event.addListener(damagemarker, 'click', function(event) {
+                var data = dataDeviceMap[this.position.lat()];
+                placeMarker(map, data, this, null);
+            });
+			}
+           
+        }
+        var zoom = parseInt(-1, 10);
+        var size = parseInt(-1, 10);
+        var style = parseInt(-1, 10);
+        zoom = zoom === -1 ? null : zoom;
+        size = size === -1 ? null : size;
+        style = style === -1 ? null : style;
+		
+		
+        damageMarkerClusterer = new MarkerClusterer(map, damagemarkers, {
+            maxZoom: zoom,
+            gridSize: size,
+            styles: styles[style],
+            imagePath: '/images/m'
+        });
+		
+		google.maps.event.addListener(damageMarkerClusterer, 'clusterclick', function(cluster){
+		});
+		
+		safeMarkerClusterer = new MarkerClusterer(map, safemarkers, {
+            maxZoom: zoom,
+            gridSize: size,
+            styles: styles[style],
+            imagePath: '/images/m'
+        });
+		
+		google.maps.event.addListener(safeMarkerClusterer, 'clusterclick', function(cluster){
+		
+			
+		});
+    }
+	
+	
+	function refreshEventInfo(eventData) {
+    	console.log(eventData);
+        
+            var latLng = new google.maps.LatLng(eventData.lattitude, eventData.longitude);
+			if( eventData.leakreason == 'null' )
+			{
+				console.log('print inside null loop');
+				var safemarker = new google.maps.Marker({
+					position: latLng,
+					draggable: true,
+					icon: markerImageHealthy
+				});
+				
+				google.maps.event.addListener(safemarker, 'click', function(event) {
+                var data = dataDeviceMap[this.position.lat()];
+                placeMarker(map, data, this, null);
+            });
+				safemarker.setMap(map);
+			}
+			else
+			{
+				console.log('inside else area to check leak');
+				console.log(eventData.leakreason);
+				var damagemarker = new google.maps.Marker({
+                position: latLng,
+                draggable: true,
+                icon: markerImageLeak
+				});
+				
+				google.maps.event.addListener(damagemarkers, 'click', function(event) {
+                var data = dataDeviceMap[this.position.lat()];
+                placeMarker(map, data, this, null);
+            });
+				damagemarker.setMap(map);
+		
+          	}
+       
+    }
+	
+	
+    function initialize(data) {
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 11,
+            center: new google.maps.LatLng(-37.822823, 144.917834),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        geocoder = new google.maps.Geocoder;
+        var refresh = document.getElementById('refresh');
+        google.maps.event.addDomListener(refresh, 'click', refreshMap);
+        refreshMap(data);
+       }
+    function clearClusters(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        markerClusterer.clearMarkers();
+    }
+    
+    /*google.maps.event.addDomListener(window, 'load', initialize);*/
+    
+    
+    function placeMarker(map, data, marker, alarmType) {
+        var infowindow = new google.maps.InfoWindow({
+            content: '<div>Customer Name: ' + data.customer_name + '<br>Device ID: ' + data.deviceId + '<br>Location: ' + data.street_name + ' <br> Last Maintainance Date : ' +
+                data.last_maintance_date.replace("T00:00:00.000Z", "") + '<br>Status:' + nullFormat(alarmType) + '</br><a href="#" onclick="sendAlert(919746781223);"> Action </a> <button id="detLnk" onClick="showCustomerDetails(\'' + data.deviceId + '\');">Details</button></div>'
+        });
+        infowindow.open(map, marker);
+    }
+    function nullFormat(str) {
+        if (typeof(str) == "null" || str == "null")
+            return "NA";
+        else
+            return str;
+    }
+    var modal = document.getElementById('detModal');
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    // When the user clicks the button, open the modal 
+    function showCustomerDetails(propId) {
+        $.ajax({
+            url: "/getcustomerdetails/" + propId,
+            success: function(result) {
+                //alert(JSON.stringify(result));
+                var custIdDiv = result[0].customer_id;
+                var custNmeDiv = result[0].customer_name;
+                var locDiv = result[0].street_name;
+                var billDteDiv = result[0].bill_payment_date;
+                var pydueDiv = result[0].bill_payment_due_date;
+                var lstmaintDiv = result[0].last_maintance_date;
+                document.getElementById("custIdDiv").innerHTML = custIdDiv;
+                document.getElementById("custNmeDiv").innerHTML = custNmeDiv;
+                document.getElementById("locDiv").innerHTML = locDiv;
+                document.getElementById("billDteDiv").innerHTML = billDteDiv.replace("T00:00:00.000Z", "");
+                document.getElementById("pydueDiv").innerHTML = pydueDiv.replace("T00:00:00.000Z", "");
+                document.getElementById("lstmaintDiv").innerHTML = lstmaintDiv.replace("T00:00:00.000Z", "");
+                var billArray = [];
+                var consumptionData = [];
+                for (var i = 0; i < result.length; i++) {
+                    var x = result[i];
+                    var y = {
+                        "label": x.bill_payment_date.replace("T00:00:00.000Z", ""),
+                        "Bill Amount": x.bill_amount,
+                        "Fine Amount": x.fine_amount,
+                        "Total Bill Amount": x.total_amount_paid
+                    };
+                    billArray.push(y);
+                    var month = monthResolver(x.bill_payment_date.replace("T00:00:00.000Z", ""));
+                    var z = {
+                        "letter": month,
+                        "frequency": x.consumed_quantity_ltr
+                    }
+                    consumptionData.push(z);
+                }
+                modal.style.display = "block";
+                drawBillChart(billArray);
+                drawConsumptionChart(consumptionData);
+            }
+        });
+    }
+    function geocodeLatLng(value) {
+        var infowindow1 = new google.maps.InfoWindow;
+        var latlngStr = value.split(',', 2);
+        var latlng = {
+            lat: parseFloat(latlngStr[0]),
+            lng: parseFloat(latlngStr[1])
+        };
+        geocoder.geocode({
+            'location': latlng
+        }, function(results, status) {
+            if (status === 'OK') {
+                if (results[0]) {
+                    map.setZoom(17);
+                    var marker12 = new google.maps.Marker({
+                        position: latlng,
+                        map: map
+                    });
+                    infowindow1.setContent(results[0].formatted_address);
+                    infowindow1.open(map, marker12);
+                    google.maps.event.addListener(map, 'zoom_changed', function() {
+                        var zoom = map.getZoom();
+                        if (zoom < 15) {
+                            marker12.setMap(null);
+                        } else {
+                            marker12.setMap(map);
+                        }
+                    });
+                } else {
+                    window.alert('No results found');
+                }
+            } else {
+                window.alert('Geocoder failed due to: ' + status);
+            }
+        });
+    }
+    function sendAlert(mobileNumber) {
+	
+        $.ajax({
+            url: "/sendsms/" + mobileNumber,
+            success: function(result) {
+			alert(result);
+            }
+        });
+    }
+    function applyFilter(arrayName, thisObj) {
+        var arrLL = eval(arrayName);
+		
+        if (thisObj.checked) {
+            for (var i = 0; i < arrLL.length; i++) {
+                var ll = arrLL[i];
+                var meterLoc = new google.maps.LatLng(ll.lattitude, ll.longitude);
+                var marker = new google.maps.Marker({
+                    position: meterLoc,
+                    draggable: true,
+                    icon: markerImageFilter
+                });
+                marker.setMap(map);
+                google.maps.event.addListener(marker, 'click', function(event) {
+                    var data = dataDeviceMap[this.position.lat()];
+                    var alarmType = alarmTypeFunc(data);
+                    placeMarker(map, data, this, alarmType);
+                });
+				eval(arrayName+'Markers').push(marker);
+            }
+        } else {
+			var filterarr =  eval(arrayName+'Markers');
+            for (var i = 0; i < filterarr.length; i++) {
+                filterarr[i].setMap(null);
+            }
+        }
+    }
+    function alarmTypeFunc(data) {
+        if (data.lowFlowAlarm == 1)
+            return "Low Flow Alarm";
+        if (data.highFlowAlarm == 1)
+            return "High Flow Alarm";
+        if (data.continuousUsageAlarm == 1)
+            return "Continuous Usage Alarm";
+        if (data.reverseFlowAlarm == 1)
+            return "Reverse Flow Alarm";
+        if (data.emptyPipeAlarm == 1)
+            return "Empty Pipe";
+        if (data.highPressureAlarm == 1)
+            "High Pressure";
+        if (data.networkLeakAlarm == 1)
+            return "Network Leak Alarm";
+        if (data.lowTemperatureAlarm == 1)
+            return "Low Temperature Alarm";
+        if (data.highTemperatureAlarm == 1)
+            return "High Temperature";
+        if (data.vibrationHotspotAlarm == 1)
+            return "Vibration Hotspot Alarm";
+    }
+    function monthResolver(date) {
+        var month = date.split("-")[1];
+        var monthArr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        return monthArr[parseInt(month) - 1];
+    }
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    //Angular JS
+    angular.module('sewApp', ['angucomplete-alt'])
+        .controller('sewCtrl', function($scope, $http) {
+            $http.get('/getsewloc').
+            then(function(response) {
+                var meterDropData = [];
+                for (var i = 0; i < response.data.length; i++) {
+                    var res = response.data[i];
+                    var key = res.Lattitude + ',' + res.Longitude;
+                    var value = res.street_name;
+                    var obj = {};
+                    obj.key = key;
+                    obj.value = value;
+                    meterDropData.push(obj);
+                }
+                $scope.selectedMeter = {};
+                $scope.meterdrop = meterDropData;
+                $scope.onChangeMeter = function(val) {
+                    JSON.stringify(val);
+                    geocodeLatLng(val.description.key);
+                }
+				
+				$.ajax({url: "/devices", success: function(result){
+        initialize(result);
+    }});
+            });
+        });
+    function drawBillChart(dataset) {
+        var columnsInfo = {
+            "Bill Amount": "Bill Amount",
+            "Fine Amount": "Fine Amount",
+            "Total Bill Amount": "Total Bill Amount"
+        };
+        $("#billChart").empty();
+        var barChartConfig = {
+            mainDiv: "#billChart",
+            colorRange: ["#2a98cd", "#df7247", "#509058"],
+            data: dataset,
+            columnsInfo: columnsInfo,
+            xAxis: "label",
+            yAxis: "runs",
+            label: {
+                xAxis: "Month",
+                yAxis: "Amount"
+            },
+            requireLegend: true
+        };
+        var groupChart = new groupBarChart(barChartConfig);
+    }
+    function drawConsumptionChart(data) {
+        d3.select("svg").remove();
+        document.getElementById("svgDiv").innerHTML = '<svg width="460" height="300"></svg>';
+        var svg = d3.select("svg"),
+            margin = {
+                top: 100,
+                right: 120,
+                bottom: 130,
+                left: 140
+            },
+            width = +svg.attr("width") - margin.left - margin.right,
+            height = +svg.attr("height") - margin.top - margin.bottom;
+        var x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+            y = d3.scaleLinear().rangeRound([height, 0]);
+        var g = svg.append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        var line = d3.line()
+            .x(function(d) {
+                return x(d.letter);
+            })
+            .y(function(d) {
+                return y(d.frequency);
+            })
+        x.domain(data.map(function(d) {
+            return d.letter;
+        }));
+        y.domain([0, d3.max(data, function(d) {
+            return d.frequency;
+        })]);
+        g.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+        g.append("g")
+            .attr("class", "axis axis--y")
+            .call(d3.axisLeft(y).ticks(5))
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", "0.71em")
+            .attr("text-anchor", "end")
+            .text("Frequency");
+        g.append("path")
+            .datum(data)
+            .attr("class", "line")
+            .attr("d", line);
+        g.selectAll("circle")
+            .data(data)
+            .enter().append("circle")
+            .attr("class", "circle")
+            .attr("cx", function(d) {
+                return x(d.letter);
+            })
+            .attr("cy", function(d) {
+                return y(d.frequency);
+            })
+            .attr("r", 4);
+    }
+    
+</script>
+
+</html>

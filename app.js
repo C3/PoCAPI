@@ -20,7 +20,7 @@ const dbconfig =    {
 
 //REST end points
 app.get('/', function(req, res) {
-   res.sendFile(path.join(__dirname + '/public/map.html'));
+   res.sendFile(path.join(__dirname + '/public/map1.html'));
 });
 
 //REST end points
@@ -66,6 +66,11 @@ app.get('/filtericon/', function(req,res){
 app.get('/js/:jsFile', function(req,res){
 	var jsFile = req.params.jsFile;
 	res.sendFile(path.join(__dirname + '/public/js/'+jsFile));
+});
+
+app.get('/images/:imgFile', function(req,res){
+	var imgFile = req.params.imgFile;
+	res.sendFile(path.join(__dirname + '/public/images/'+imgFile));
 });
 
 app.get('/getsewloc', function(req,res){
