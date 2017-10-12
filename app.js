@@ -152,7 +152,7 @@ var eventHubClient = EventHubClient.fromConnectionString('Endpoint=sb://sewehd00
 
 	eventHubClient.open()
     .then(function() {
-        return eventHubClient.createReceiver('sew-leak-detection', '0', { startAfterTime: Date.now() })
+        return eventHubClient.createReceiver('$Default', '0', { startAfterTime: Date.now() })
     })
     .then(function (rx) {
         rx.on('errorReceived', function (err) { console.log(err); }); 
