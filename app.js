@@ -133,18 +133,79 @@ app.get('/getbillingdetails/:custId', function(req,res){
 });
 
 const twilioclient = require('twilio')(
-  "ACc57b0f4199a58e7aeadc94d0e012b572",
-  "97fd58f7c98833768fdc59eabbecaff5"
+  "AC401d9a1f0bb9ff980b455d68426fc25e", 
+  "859a5122522f260d556eff34fda60213" 
 );
 
-app.get('/sendsms/:mobileNumber', function(req,res){
-var toMobileNumer = req.params.mobileNumber;
-twilioclient.messages.create({
-  from: '+61429532014',
-  to: '+61450612035',
-  body: "Hello world from Node JS SEW App"
-}).then((messsage) => console.log(message.sid));
+app.get('/sendsms/:address', function(req,res){
+//console.log("Tested");	
+	try {			
+			var customerMobile = '+919746781223';
+			var technicianMobile = '+919037575291';
+			var msgCustomer = "Hi, we apologies for the service disruption.  The ETA for restoration is within 2 hours.  We’ll provide an update when available.";
+			var msgTechnician = "There’s an immediate outage located at " + req.params.address +  " Please proceed to site as next job";
+			sendalert(customerMobile, msgCustomer,function(response){				
+				//res.json(response);				
+			})
+
+			sendalert(technicianMobile, msgTechnician,function(response){				
+				//res.json(response);				
+			})
+	
+	} catch (err) {
+		createErrorResponse(err, res);
+	}
+
 });
+
+function sendalert(mobNumber,msg,callback) {	
+	
+		var response = {};
+				
+		twilioclient.messages.create({
+			body: msg,
+			to: mobNumber, // Text this number
+		   from: '+18444580349' // From a valid Twilio number
+		},function(err, data) {		
+			
+			if(err){				
+				console.log(err);				
+				response.status = "Failed";
+				response.message = err.message;	
+				response.statusCode = err.status;				
+			} else {				
+				response.status = "Success";					
+				response.From = data.from;
+				response.To = data.to;
+				//response.message = data.body;				
+				console.log(data);							
+			}		
+			 console.log(response);
+			 callback(response);			
+			 return;
+			
+		});		
+}
+
+function createErrorResponse(err, res) {
+	
+	var errorMessage = err.message == undefined ? err : err.message;
+	var response = {
+		"status" : "Error",
+		"message" : errorMessage
+	};
+	if (Object.prototype.hasOwnProperty.call(err, "code")) {
+		if (err.code == 401) {
+			res.status(401);
+			response.message = "Unauthorized: Access is denied due to invalid credentials.";
+		} else if (err.code == 404) {
+			response.message = "Requested data cannot be found.";
+		}
+	}
+	//logger.errorLog(response.message);
+	console.log(response.message)
+	res.json(response);
+}
 
 //SOCKET IO on
 

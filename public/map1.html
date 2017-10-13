@@ -688,7 +688,9 @@
     function placeMarker(map, data, marker, alarmType) {
         var infowindow = new google.maps.InfoWindow({
             content: '<div>Customer Name: ' + data.customer_name + '<br>Device ID: ' + data.deviceId + '<br>Location: ' + data.street_name + ' <br> Last Maintainance Date : ' +
-                data.last_maintance_date.replace("T00:00:00.000Z", "") + '<br>Status:' + nullFormat(alarmType) + '</br><a href="#" onclick="sendAlert(919746781223);"> Action </a> <button id="detLnk" onClick="showCustomerDetails(\'' + data.deviceId + '\');">Details</button></div>'
+                data.last_maintance_date.replace("T00:00:00.000Z", "") + '<br>Status:' + nullFormat(alarmType) + 
+				'</br><a href="#" onclick="sendAlert(\''+ data.street_name +'\');"> Action </a>'+
+				'<button id="detLnk" onClick="showCustomerDetails(\'' + data.deviceId + '\');">Details</button></div>'
         });
         infowindow.open(map, marker);
     }
@@ -783,7 +785,7 @@
         $.ajax({
             url: "/sendsms/" + mobileNumber,
             success: function(result) {
-			alert(result);
+			//alert(result);
             }
         });
     }
