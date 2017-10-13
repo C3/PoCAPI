@@ -132,12 +132,16 @@ app.get('/getbillingdetails/:custId', function(req,res){
 		});
 });
 
+const twilioclient = require('twilio')(
+  "ACc57b0f4199a58e7aeadc94d0e012b572",
+  "97fd58f7c98833768fdc59eabbecaff5"
+);
 
 app.get('/sendsms/:mobileNumber', function(req,res){
 var toMobileNumer = req.params.mobileNumber;
 twilioclient.messages.create({
-  from: "3213253112",
-  to:toMobileNumer,
+  from: '+61429532014',
+  to: '+61450612035',
   body: "Hello world from Node JS SEW App"
 }).then((messsage) => console.log(message.sid));
 });
