@@ -692,7 +692,7 @@
 
     function placeMarker(map, data, marker, alarmType) {
         var infowindow = new google.maps.InfoWindow({
-            content: '<div class="modal-dialog"> <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Details</h4> ' +
+            content: '<div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Details</h4> ' +
                         '</div><div class="modal-body"><div class="col-md-12 col-lg-12 margintop20 pdg0 rightpadding0"><span>Customer Name:</span><span>' + data.customer_name + 
                         '</span></div><div class="col-md-12 col-lg-12 margintop20 pdg0 rightpadding0"><span>Device ID:</span><span>' + data.deviceId + 
                         '</span></div><div class="col-md-12 col-lg-12 margintop20 pdg0 rightpadding0"><span>Location:</span><span>' + data.street_name + 
@@ -700,7 +700,7 @@
                         + data.last_maintance_date.replace("T00:00:00.000Z", "") + '</span></div><div class="col-md-12 col-lg-12 margintop20 pdg0 rightpadding0"><span>Status:</span><span>' 
                         + nullFormat(alarmType) + ' </span></div></div></div><div class="modal-footer">' +
                         '<button id="btnRebootSubmit" class="btn btn-success" onclick="submitModal();">Submit</button>' +
-                        '<button type="button" id="detLnk" class="btn btn-default" onClick="showCustomerDetails(\'' + data.deviceId + '\');">Details</button></div></div>'
+                        '<button type="button" id="detLnk" class="btn btn-default" onClick="showCustomerDetails(\'' + data.deviceId + '\');">Details</button></div>'
         });
         infowindow.open(map, marker);
     }
