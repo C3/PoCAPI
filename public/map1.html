@@ -162,8 +162,8 @@
 </head>
 
 <body>
-    <h3>Sew Water</h3>
-    <div class="container" ng-app="sewApp" ng-controller="sewCtrl">
+    <h3>SEW Operations Dashboard</h3>
+    <div ng-app="sewApp" ng-controller="sewCtrl">
         <nav>
             <ul>
                 <li><b>Search by DeviceId or Region</b></li>
@@ -234,12 +234,11 @@
                 <h4 class="modal-title">Last Three Months Consumtion Trend</h4>
             </div>
 
-            <span class="close">&times;</span>
-            <table  class="table table-striped">
-                
+            <!--<span class="close">&times;</span>-->
+            <table  class="table table-striped">        
                 <tr>
                     <td>
-                        <table border="1px;">
+                        <table class="table" border="1px;">
                             <th colspan="2" bgcolor="#9acd32">Customer Details</th>
                             <tr>
                                 <td style="width:65%;">Customer ID</td>
@@ -280,7 +279,7 @@
                         </table>
                     </td>
                     <td>
-                        <table>
+                        <table class="table">
                             <th>Last 3 Month Consumption Trend</th>
                             <tr>
                                 <td>
