@@ -692,9 +692,8 @@
 
     function placeMarker(map, data, marker, alarmType) {
         var infowindow = new google.maps.InfoWindow({
-            content: '<div class="modal-content">' +
+            content:
         '            <div class="modal-header">' +
-        '                <button type="button" class="close" data-dismiss="modal">&times;</button>' +
         '                <h4 class="modal-title">Customer Details</h4>' +
         '            </div>' +
         '            <div class="modal-body">' +
@@ -719,12 +718,10 @@
         '                    <span>' + nullFormat(alarmType) + '</span>' +
         '                </div>' +
         '            </div>' +
-        '        </div>' +
         '        <div class="modal-footer">' +
-        //'            <button id="btnRebootSubmit" class="btn btn-success" onclick="submitModal();">Submit</button>' +
-        //'            <button type="button" id="detLnk" class="btn btn-default" onClick="showCustomerDetails(\'' + data.deviceId + '\');">Details</button>' +
                      '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>' +
                      '<button type="button" class="btn btn-default" onclick="sendAlert(\'' + data.street_name + '\');">Action</button>' +
+                //	'</br><a href="#" onclick="sendAlert(\''+ data.street_name +'\');"> Action </a>'+
                     '<button type="button" id="detLnk" class="btn btn-default" onClick="showCustomerDetails(\'' + data.deviceId + '\');">Details</button> ' +
         '        </div>' 
         });
