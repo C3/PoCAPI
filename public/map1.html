@@ -248,7 +248,18 @@
             <table class="table table-striped">
                 <tr>
                     <td>
-                        <table class="table" border="1px;">
+                        <div class="modal-body">
+
+                            <div class="col-md-12 col-lg-12 margintop20 pdg0 rightpadding0">
+                                <div id="custIdDiv">Customer ID: </div>
+                                <div id="custIdDiv"></div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 margintop20 pdg0 rightpadding0">
+                                <div id="custIdDiv">Customer Name: </div>
+                                <div id="custNmeDiv"></div>
+                            </div>
+                        </div>
+                        <!--<table class="table" border="1px;">
                             <th colspan="2" bgcolor="#9acd32">Customer Details</th>
                             <tr>
                                 <td style="width:65%;">Customer ID</td>
@@ -286,7 +297,7 @@
                                     <div id="lstmaintDiv"></div>
                                 </td>
                             </tr>
-                        </table>
+                        </table>-->
                     </td>
                     <td>
                         <table class="table">
@@ -755,13 +766,6 @@
     //    data.last_maintance_date.replace("T00:00:00.000Z", "") + '<br>Status:' + nullFormat(alarmType) +
     //	'</br><a href="#" onclick="sendAlert(\''+ data.street_name +'\');"> Action </a>'+
     //	'<button id="detLnk" onClick="showCustomerDetails(\'' + data.deviceId + '\');">Details</button></div></div>'
-
-    //    <div class="panel panel-default">
-    //  <div class="panel-heading">Panel heading</div>
-    //  <div class="panel-body">
-    //    Panel content
-    //  </div>
-    //</div>
 
     function placeMarker(map, data, marker, alarmType) {
         var infowindow = new google.maps.InfoWindow({
