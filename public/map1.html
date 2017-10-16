@@ -769,7 +769,7 @@
     function placeMarker(map, data, marker, alarmType) {
         var infowindow = new google.maps.InfoWindow({
             content:
-        '            <div class="modal-header">' +
+        '            <div class="modal-header nopadding">' +
         '                <h4 class="modal-title">Customer Details</h4>' +
         '            </div>' +
         '            <div class="modal-body nopadding">' +
@@ -789,7 +789,7 @@
         '                    <h5><b> Status: </b>' + nullFormat(alarmType) + '</h5>' +
         '                </div>' +
         '            </div>' +
-        '        <div class="modal-footer">' +
+        '        <div class="modal-footer nopadding">' +
                     //'<button type="button" class="btn btn-default" onclick="sendAlert(\'' + data.street_name + '\');">Action</button>' +
                 	'<a href="#" class="btn btn-default" role="button" onclick="sendAlert(\'' + data.street_name + '\');">Send Alert</a>' +
                     '<button type="button" id="detLnk" class="btn btn-default" onClick="showCustomerDetails(\'' + data.deviceId + '\');">Details</button> ' +
