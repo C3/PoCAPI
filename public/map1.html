@@ -12,7 +12,7 @@
             font-family: Arial;
             font-size: 16px;
         }
-        
+
         #map-container {
             padding: 6px;
             border-width: 1px;
@@ -23,31 +23,31 @@
             box-shadow: rgba(64, 64, 64, 0.1) 0 2px 5px;
             width: 800px;
         }
-        
+
         #map {
             width: 800px;
             height: 400px;
         }
-        
+
         #actions {
             list-style: none;
             padding: 0;
         }
-        
+
         #inline-actions {
             padding-top: 10px;
         }
-        
+
         .item {
             display: none;
             margin-left: 20px;
         }
-        
+
         div.container {
             width: 100%;
             border: 1px solid gray;
         }
-        
+
         header,
         footer {
             padding: 1em;
@@ -56,23 +56,23 @@
             clear: left;
             text-align: center;
         }
-        
+
         nav {
             float: left;
             max-width: 200px;
             margin: 0;
             padding: 1em;
         }
-        
+
         nav ul {
             list-style-type: none;
             padding: 0;
         }
-        
+
         nav ul a {
             text-decoration: none;
         }
-        
+
         article {
             margin-left: 170px;
             border-left: 1px solid gray;
@@ -80,7 +80,7 @@
             overflow: hidden;
         }
         /* The Modal (background) */
-        
+
         .modal {
             display: none;
             /* Hidden by default */
@@ -104,7 +104,7 @@
             /* Black w/ opacity */
         }
         /* Modal Content */
-        
+
         .modal-content {
             background-color: #fefefe;
             margin: auto;
@@ -113,39 +113,39 @@
             width: 60%;
         }
         /* The Close Button */
-        
+
         .close {
             color: #aaaaaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
-        
+
         .close:hover,
         .close:focus {
             color: #000;
             text-decoration: none;
             cursor: pointer;
         }
-        
+
         .bar {
             fill: steelblue;
         }
-        
+
         .bar:hover {
             fill: brown;
         }
-        
+
         .axis--x path {
             display: none;
         }
-        
+
         .line {
             fill: none;
             stroke: steelblue;
             stroke-width: 3px;
         }
-        
+
         .circle {
             fill: steelblue;
         }
@@ -175,43 +175,53 @@
             </ul>
             <ul>
                 <li>
-                    <input type="checkbox" onchange="applyFilter('lowFlowLL',this);" />Low Flow Alarm</li>
+                    <input type="checkbox" onchange="applyFilter('lowFlowLL',this);" />Low Flow Alarm
+                </li>
             </ul>
             <ul>
                 <li>
-                    <input type="checkbox" onchange="applyFilter('highFlowLL',this);" />High Flow Alarm</li>
+                    <input type="checkbox" onchange="applyFilter('highFlowLL',this);" />High Flow Alarm
+                </li>
             </ul>
             <ul>
                 <li>
-                    <input type="checkbox" onchange="applyFilter('contUsageLL',this);" />Cont. Usage Alarm</li>
+                    <input type="checkbox" onchange="applyFilter('contUsageLL',this);" />Cont. Usage Alarm
+                </li>
             </ul>
             <ul>
                 <li>
-                    <input type="checkbox" onchange="applyFilter('reverseFlowLL',this);" />Reverse Flow Alarm</li>
+                    <input type="checkbox" onchange="applyFilter('reverseFlowLL',this);" />Reverse Flow Alarm
+                </li>
             </ul>
             <ul>
                 <li>
-                    <input type="checkbox" onchange="applyFilter('emptyPipeLL',this);" />Empty Pipe</li>
+                    <input type="checkbox" onchange="applyFilter('emptyPipeLL',this);" />Empty Pipe
+                </li>
             </ul>
             <ul>
                 <li>
-                    <input type="checkbox" onchange="applyFilter('highPressureLL',this);" />High Pressure Alarm</li>
+                    <input type="checkbox" onchange="applyFilter('highPressureLL',this);" />High Pressure Alarm
+                </li>
             </ul>
             <ul>
                 <li>
-                    <input type="checkbox" onchange="applyFilter('nwLeakLL',this);" />Network Leak</li>
+                    <input type="checkbox" onchange="applyFilter('nwLeakLL',this);" />Network Leak
+                </li>
             </ul>
             <ul>
                 <li>
-                    <input type="checkbox" onchange="applyFilter('lowTempLL',this);" />Low Temperature</li>
+                    <input type="checkbox" onchange="applyFilter('lowTempLL',this);" />Low Temperature
+                </li>
             </ul>
             <ul>
                 <li>
-                    <input type="checkbox" onchange="applyFilter('highTempLL',this);" />High Temperature</li>
+                    <input type="checkbox" onchange="applyFilter('highTempLL',this);" />High Temperature
+                </li>
             </ul>
             <ul>
                 <li>
-                    <input type="checkbox" onchange="applyFilter('vibHotLL',this);" />Vibration Hotspot</li>
+                    <input type="checkbox" onchange="applyFilter('vibHotLL',this);" />Vibration Hotspot
+                </li>
             </ul>
         </nav>
 
@@ -235,7 +245,7 @@
             </div>
 
             <!--<span class="close">&times;</span>-->
-            <table  class="table table-striped">        
+            <table class="table table-striped">
                 <tr>
                     <td>
                         <table class="table" border="1px;">
@@ -304,13 +314,6 @@
             </table>
         </div>
         <!-- End Modal content -->
-    
-    
-    
-    
-    
-   
-        
         <!--<div id="myModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -347,16 +350,16 @@
                 </div>
             </div>
         </div>-->
-        
-        
-         
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
     </div>
 
 
@@ -452,9 +455,9 @@
         'chco=FFFFFF,008CFF,000000&ext=.png';
     var imageUrlDuringLeak = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&' +
         'chco=FFFFFF,c1392b,000000&ext=.png';
-	var imageUrlDuringFilter = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&' +
+    var imageUrlDuringFilter = 'http://chart.apis.google.com/chart?cht=mm&chs=24x32&' +
         'chco=FFFFFF,007936,000000&ext=.png';
-	//filter data array
+    //filter data array
     var dataDeviceMap = {};
     var dataLattMap = {};
     var leakLattitudes = {};
@@ -468,11 +471,11 @@
     var lowTempLL = [];
     var highTempLL = [];
     var vibHotLL = [];
-    var tamperLL=[];
-	
-	//filter marker array
-	
-    
+    var tamperLL = [];
+
+    //filter marker array
+
+
     var lowFlowLLMarkers = [];
     var highFlowLLMarkers = [];
     var contUsageLLMarkers = [];
@@ -483,60 +486,60 @@
     var lowTempLLMarkers = [];
     var highTempLLMarkers = [];
     var vibHotLLMarkers = [];
-	
+
     var markerImageHealthy = new google.maps.MarkerImage(imageUrlHealthy,
         new google.maps.Size(24, 32));
     var markerImageLeak = new google.maps.MarkerImage(imageUrlDuringLeak,
         new google.maps.Size(24, 32));
-	var markerImageFilter = new google.maps.MarkerImage(imageUrlDuringFilter,
+    var markerImageFilter = new google.maps.MarkerImage(imageUrlDuringFilter,
         new google.maps.Size(24, 32));
-	
-	var socket = io.connect('http://sewwad001-api.azurewebsites.net:80');
-	//var socket = io.connect('http://localhost:3000');
-	socket.on('newMsg', function(data){
-			
-		var device = dataLattMap[data.deviceid];		
-		var devicelat = dataDeviceMap[device.lattitude];
-		console.log(devicelat.deviceId);
-		console.log(data.leakreason);
-		devicelat.leakreason = data.leakreason;
-			
-		if(data.lowFlowAlarm==1)
-			lowFlowLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
-		if(data.highFlowAlarm==1)
-			highFlowLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
-		if(data.continuousUsageAlarm==1)
-			contUsageLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
-		if(data.reverseFlowAlarm==1)
-			reverseFlowLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
-		if(data.emptyPipeAlarm==1)
-			emptyPipeLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
-		if(data.highPressureAlarm==1)
-			highPressureLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
-		if(data.networkLeakAlarm==1)
-			nwLeakLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
-		if(data.lowTemperatureAlarm==1)
-			lowTempLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
-		if(data.highTemperatureAlarm==1)
-			highTempLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
-		if(data.vibrationhotspotalarm==1)
-			vibHotLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});
-		if(data.tamperalarm==1)
-			tamperLL.push({lattitude:devicelat.lattitude,longitude:devicelat.longitude,leakreason:data.leakreason,deviceid:devicelat.deviceId});	
-		dataDeviceMap[device.lattitude] = devicelat;
-		
-		refreshEventInfo(devicelat);
-		
-		
 
-	});
-	
-	var safemarkers = [];
-	var damagemarkers = [];
-   
-	function refreshMap(masterData) {
-    	
-        
+    var socket = io.connect('http://sewwad001-api.azurewebsites.net:80');
+    //var socket = io.connect('http://localhost:3000');
+    socket.on('newMsg', function (data) {
+
+        var device = dataLattMap[data.deviceid];
+        var devicelat = dataDeviceMap[device.lattitude];
+        console.log(devicelat.deviceId);
+        console.log(data.leakreason);
+        devicelat.leakreason = data.leakreason;
+
+        if (data.lowFlowAlarm == 1)
+            lowFlowLL.push({ lattitude: devicelat.lattitude, longitude: devicelat.longitude, leakreason: data.leakreason, deviceid: devicelat.deviceId });
+        if (data.highFlowAlarm == 1)
+            highFlowLL.push({ lattitude: devicelat.lattitude, longitude: devicelat.longitude, leakreason: data.leakreason, deviceid: devicelat.deviceId });
+        if (data.continuousUsageAlarm == 1)
+            contUsageLL.push({ lattitude: devicelat.lattitude, longitude: devicelat.longitude, leakreason: data.leakreason, deviceid: devicelat.deviceId });
+        if (data.reverseFlowAlarm == 1)
+            reverseFlowLL.push({ lattitude: devicelat.lattitude, longitude: devicelat.longitude, leakreason: data.leakreason, deviceid: devicelat.deviceId });
+        if (data.emptyPipeAlarm == 1)
+            emptyPipeLL.push({ lattitude: devicelat.lattitude, longitude: devicelat.longitude, leakreason: data.leakreason, deviceid: devicelat.deviceId });
+        if (data.highPressureAlarm == 1)
+            highPressureLL.push({ lattitude: devicelat.lattitude, longitude: devicelat.longitude, leakreason: data.leakreason, deviceid: devicelat.deviceId });
+        if (data.networkLeakAlarm == 1)
+            nwLeakLL.push({ lattitude: devicelat.lattitude, longitude: devicelat.longitude, leakreason: data.leakreason, deviceid: devicelat.deviceId });
+        if (data.lowTemperatureAlarm == 1)
+            lowTempLL.push({ lattitude: devicelat.lattitude, longitude: devicelat.longitude, leakreason: data.leakreason, deviceid: devicelat.deviceId });
+        if (data.highTemperatureAlarm == 1)
+            highTempLL.push({ lattitude: devicelat.lattitude, longitude: devicelat.longitude, leakreason: data.leakreason, deviceid: devicelat.deviceId });
+        if (data.vibrationhotspotalarm == 1)
+            vibHotLL.push({ lattitude: devicelat.lattitude, longitude: devicelat.longitude, leakreason: data.leakreason, deviceid: devicelat.deviceId });
+        if (data.tamperalarm == 1)
+            tamperLL.push({ lattitude: devicelat.lattitude, longitude: devicelat.longitude, leakreason: data.leakreason, deviceid: devicelat.deviceId });
+        dataDeviceMap[device.lattitude] = devicelat;
+
+        refreshEventInfo(devicelat);
+
+
+
+    });
+
+    var safemarkers = [];
+    var damagemarkers = [];
+
+    function refreshMap(masterData) {
+
+
         for (var key in masterData) {
             var data = masterData[key];
             dataDeviceMap[data.lattitude] = data;
@@ -549,7 +552,7 @@
                     leakreason: data.leakreason,
                     deviceid: data.deviceId
                 });
-                
+
             }
             if (data.highFlowAlarm == 1) {
                 highFlowLL.push({
@@ -558,7 +561,7 @@
                     leakreason: data.leakreason,
                     deviceid: data.deviceId
                 });
-                
+
             }
             if (data.continuousUsageAlarm == 1) {
                 contUsageLL.push({
@@ -567,7 +570,7 @@
                     leakreason: data.leakreason,
                     deviceid: data.deviceId
                 });
-                
+
             }
             if (data.reverseFlowAlarm == 1) {
                 reverseFlowLL.push({
@@ -576,7 +579,7 @@
                     leakreason: data.leakreason,
                     deviceid: data.deviceId
                 });
-                
+
             }
             if (data.emptyPipeAlarm == 1) {
                 emptyPipeLL.push({
@@ -585,7 +588,7 @@
                     leakreason: data.leakreason,
                     deviceid: data.deviceId
                 });
-                
+
             }
             if (data.highPressureAlarm == 1) {
                 highPressureLL.push({
@@ -594,7 +597,7 @@
                     leakreason: data.leakreason,
                     deviceid: data.deviceId
                 });
-                
+
             }
             if (data.networkLeakAlarm == 1) {
                 nwLeakLL.push({
@@ -603,7 +606,7 @@
                     leakreason: data.leakreason,
                     deviceid: data.deviceId
                 });
-                
+
             }
             if (data.lowTemperatureAlarm == 1) {
                 lowTempLL.push({
@@ -612,7 +615,7 @@
                     leakreason: data.leakreason,
                     deviceid: data.deviceId
                 });
-                
+
             }
             if (data.highTemperatureAlarm == 1) {
                 highTempLL.push({
@@ -621,7 +624,7 @@
                     leakreason: data.leakreason,
                     deviceid: data.deviceId
                 });
-                
+
             }
             if (data.vibrationHotspotAlarm == 1) {
                 vibHotLL.push({
@@ -630,37 +633,35 @@
                     leakreason: data.leakreason,
                     deviceid: data.deviceId
                 });
-                
+
             }
             var latLng = new google.maps.LatLng(data.lattitude, data.longitude)
-			if( data.leakreason == null )
-			{
-				
-				var safemarker = new google.maps.Marker({
-					position: latLng,
-					draggable: true,
-					icon: markerImageHealthy
-				});
-				safemarkers.push(safemarker);
-				google.maps.event.addListener(safemarker, 'click', function(event) {
-                var data = dataDeviceMap[this.position.lat()];
-                placeMarker(map, data, this, null);
-            });
-			}
-			else
-			{
-				var damagemarker = new google.maps.Marker({
-                position: latLng,
-                draggable: true,
-                icon: markerImageLeak
-				});
-				damagemarkers.push(damagemarker);
-				google.maps.event.addListener(damagemarker, 'click', function(event) {
-                var data = dataDeviceMap[this.position.lat()];
-                placeMarker(map, data, this, null);
-            });
-			}
-           
+            if (data.leakreason == null) {
+
+                var safemarker = new google.maps.Marker({
+                    position: latLng,
+                    draggable: true,
+                    icon: markerImageHealthy
+                });
+                safemarkers.push(safemarker);
+                google.maps.event.addListener(safemarker, 'click', function (event) {
+                    var data = dataDeviceMap[this.position.lat()];
+                    placeMarker(map, data, this, null);
+                });
+            }
+            else {
+                var damagemarker = new google.maps.Marker({
+                    position: latLng,
+                    draggable: true,
+                    icon: markerImageLeak
+                });
+                damagemarkers.push(damagemarker);
+                google.maps.event.addListener(damagemarker, 'click', function (event) {
+                    var data = dataDeviceMap[this.position.lat()];
+                    placeMarker(map, data, this, null);
+                });
+            }
+
         }
         var zoom = parseInt(-1, 10);
         var size = parseInt(-1, 10);
@@ -668,71 +669,69 @@
         zoom = zoom === -1 ? null : zoom;
         size = size === -1 ? null : size;
         style = style === -1 ? null : style;
-		
-		
+
+
         damageMarkerClusterer = new MarkerClusterer(map, damagemarkers, {
             maxZoom: zoom,
             gridSize: size,
             styles: styles[style],
             imagePath: '/images/m'
         });
-		
-		google.maps.event.addListener(damageMarkerClusterer, 'clusterclick', function(cluster){
-		});
-		
-		safeMarkerClusterer = new MarkerClusterer(map, safemarkers, {
+
+        google.maps.event.addListener(damageMarkerClusterer, 'clusterclick', function (cluster) {
+        });
+
+        safeMarkerClusterer = new MarkerClusterer(map, safemarkers, {
             maxZoom: zoom,
             gridSize: size,
             styles: styles[style],
             imagePath: '/images/m'
         });
-		
-		google.maps.event.addListener(safeMarkerClusterer, 'clusterclick', function(cluster){
-		
-			
-		});
+
+        google.maps.event.addListener(safeMarkerClusterer, 'clusterclick', function (cluster) {
+
+
+        });
     }
-	
-	
-	function refreshEventInfo(eventData) {
-    	        
-            var latLng = new google.maps.LatLng(eventData.lattitude, eventData.longitude);
-			if( eventData.leakreason == 'null' )
-			{
-				var safemarker = new google.maps.Marker({
-					position: latLng,
-					draggable: true,
-					icon: markerImageHealthy
-				});
-				
-				google.maps.event.addListener(safemarker, 'click', function(event) {
+
+
+    function refreshEventInfo(eventData) {
+
+        var latLng = new google.maps.LatLng(eventData.lattitude, eventData.longitude);
+        if (eventData.leakreason == 'null') {
+            var safemarker = new google.maps.Marker({
+                position: latLng,
+                draggable: true,
+                icon: markerImageHealthy
+            });
+
+            google.maps.event.addListener(safemarker, 'click', function (event) {
                 var data = dataDeviceMap[this.position.lat()];
                 placeMarker(map, data, this, null);
             });
-				safemarker.setMap(map);
-			}
-			else
-			{
-				
-				
-				var damagemarker = new google.maps.Marker({
+            safemarker.setMap(map);
+        }
+        else {
+
+
+            var damagemarker = new google.maps.Marker({
                 position: latLng,
                 draggable: true,
                 icon: markerImageLeak
-				});
-				
-				google.maps.event.addListener(damagemarker, 'click', function(event) {
+            });
+
+            google.maps.event.addListener(damagemarker, 'click', function (event) {
                 var data = dataDeviceMap[this.position.lat()];
-                
+
                 placeMarker(map, data, this, eventData.leakreason);
             });
-				damagemarker.setMap(map);
-		
-          	}
-       
+            damagemarker.setMap(map);
+
+        }
+
     }
-	
-	
+
+
     function initialize(data) {
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 11,
@@ -743,19 +742,26 @@
         var refresh = document.getElementById('refresh');
         google.maps.event.addDomListener(refresh, 'click', refreshMap);
         refreshMap(data);
-       }
+    }
     function clearClusters(e) {
         e.preventDefault();
         e.stopPropagation();
         markerClusterer.clearMarkers();
     }
-    
+
     /*google.maps.event.addDomListener(window, 'load', initialize);*/
-    
+
     //content: '<div class="modal-dialog"><div>Customer Name: ' + data.customer_name + '<br>Device ID: ' + data.deviceId + '<br>Location: ' + data.street_name + ' <br> Last Maintainance Date : ' +
-    //    data.last_maintance_date.replace("T00:00:00.000Z", "") + '<br>Status:' + nullFormat(alarmType) + 
+    //    data.last_maintance_date.replace("T00:00:00.000Z", "") + '<br>Status:' + nullFormat(alarmType) +
     //	'</br><a href="#" onclick="sendAlert(\''+ data.street_name +'\');"> Action </a>'+
     //	'<button id="detLnk" onClick="showCustomerDetails(\'' + data.deviceId + '\');">Details</button></div></div>'
+
+    //    <div class="panel panel-default">
+    //  <div class="panel-heading">Panel heading</div>
+    //  <div class="panel-body">
+    //    Panel content
+    //  </div>
+    //</div>
 
     function placeMarker(map, data, marker, alarmType) {
         var infowindow = new google.maps.InfoWindow({
@@ -764,11 +770,17 @@
         '                <h4 class="modal-title">Customer Details</h4>' +
         '            </div>' +
         '            <div class="modal-body">' +
-        '                <div class="row">' +
-            '                <div class="col-sm-6">' +
-            '                    <span>Name:</span>' +
-            '                    <span>' + data.customer_name + '</span>' +
-            '                </div>' +
+
+
+        '                <div class="panel panel-default">' +
+        '                    <div class="panel-heading">Panel heading</div>' +
+        '                       <div class="panel-body">' +
+        '                           Panel content' +
+        '                       </div>' +
+        '                    </div>' +
+        '                <div class="col-md-12 col-lg-12 margintop20 pdg0 rightpadding0">' +
+        '                    <span>Name:</span>' +
+        '                    <span>' + data.customer_name + '</span>' +
         '                </div>' +
         '                <div class="col-md-12 col-lg-12 margintop20 pdg0 rightpadding0">' +
         '                    <span>Device ID:</span>' +
@@ -791,12 +803,12 @@
                     //'<button type="button" class="btn btn-default" onclick="sendAlert(\'' + data.street_name + '\');">Action</button>' +
                 	'<a href="#" class="btn btn-default" role="button" onclick="sendAlert(\'' + data.street_name + '\');">Send Alert</a>' +
                     '<button type="button" id="detLnk" class="btn btn-default" onClick="showCustomerDetails(\'' + data.deviceId + '\');">Details</button> ' +
-        '        </div>' 
+        '        </div>'
         });
         infowindow.open(map, marker);
     }
     function nullFormat(str) {
-        if (typeof(str) == "null" || str == "null")
+        if (typeof (str) == "null" || str == "null")
             return "NA";
         else
             return str;
@@ -804,11 +816,11 @@
     var modal = document.getElementById('detModal');
     // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
-    // When the user clicks the button, open the modal 
+    // When the user clicks the button, open the modal
     function showCustomerDetails(propId) {
         $.ajax({
             url: "/getcustomerdetails/" + propId,
-            success: function(result) {
+            success: function (result) {
                 //alert(JSON.stringify(result));
                 var custIdDiv = result[0].customer_id;
                 var custNmeDiv = result[0].customer_name;
@@ -855,7 +867,7 @@
         };
         geocoder.geocode({
             'location': latlng
-        }, function(results, status) {
+        }, function (results, status) {
             if (status === 'OK') {
                 if (results[0]) {
                     map.setZoom(17);
@@ -865,7 +877,7 @@
                     });
                     infowindow1.setContent(results[0].formatted_address);
                     infowindow1.open(map, marker12);
-                    google.maps.event.addListener(map, 'zoom_changed', function() {
+                    google.maps.event.addListener(map, 'zoom_changed', function () {
                         var zoom = map.getZoom();
                         if (zoom < 15) {
                             marker12.setMap(null);
@@ -882,17 +894,17 @@
         });
     }
     function sendAlert(mobileNumber) {
-	
+
         $.ajax({
             url: "/sendsms/" + mobileNumber,
-            success: function(result) {
-			//alert(result);
+            success: function (result) {
+                //alert(result);
             }
         });
     }
     function applyFilter(arrayName, thisObj) {
         var arrLL = eval(arrayName);
-		
+
         if (thisObj.checked) {
             for (var i = 0; i < arrLL.length; i++) {
                 var ll = arrLL[i];
@@ -903,15 +915,15 @@
                     icon: markerImageFilter
                 });
                 marker.setMap(map);
-                google.maps.event.addListener(marker, 'click', function(event) {
+                google.maps.event.addListener(marker, 'click', function (event) {
                     var data = dataDeviceMap[this.position.lat()];
                     var alarmType = alarmTypeFunc(data);
                     placeMarker(map, data, this, alarmType);
                 });
-				eval(arrayName+'Markers').push(marker);
+                eval(arrayName + 'Markers').push(marker);
             }
         } else {
-			var filterarr =  eval(arrayName+'Markers');
+            var filterarr = eval(arrayName + 'Markers');
             for (var i = 0; i < filterarr.length; i++) {
                 filterarr[i].setMap(null);
             }
@@ -945,20 +957,20 @@
         return monthArr[parseInt(month) - 1];
     }
     // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
+    span.onclick = function () {
         modal.style.display = "none";
     }
     // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
         }
     }
     //Angular JS
     angular.module('sewApp', ['angucomplete-alt'])
-        .controller('sewCtrl', function($scope, $http) {
+        .controller('sewCtrl', function ($scope, $http) {
             $http.get('/getsewloc').
-            then(function(response) {
+            then(function (response) {
                 var meterDropData = [];
                 for (var i = 0; i < response.data.length; i++) {
                     var res = response.data[i];
@@ -971,14 +983,16 @@
                 }
                 $scope.selectedMeter = {};
                 $scope.meterdrop = meterDropData;
-                $scope.onChangeMeter = function(val) {
+                $scope.onChangeMeter = function (val) {
                     JSON.stringify(val);
                     geocodeLatLng(val.description.key);
                 }
-				
-				$.ajax({url: "/devices", success: function(result){
-        initialize(result);
-    }});
+
+                $.ajax({
+                    url: "/devices", success: function (result) {
+                        initialize(result);
+                    }
+                });
             });
         });
     function drawBillChart(dataset) {
@@ -1020,16 +1034,16 @@
         var g = svg.append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
         var line = d3.line()
-            .x(function(d) {
+            .x(function (d) {
                 return x(d.letter);
             })
-            .y(function(d) {
+            .y(function (d) {
                 return y(d.frequency);
             })
-        x.domain(data.map(function(d) {
+        x.domain(data.map(function (d) {
             return d.letter;
         }));
-        y.domain([0, d3.max(data, function(d) {
+        y.domain([0, d3.max(data, function (d) {
             return d.frequency;
         })]);
         g.append("g")
@@ -1053,15 +1067,15 @@
             .data(data)
             .enter().append("circle")
             .attr("class", "circle")
-            .attr("cx", function(d) {
+            .attr("cx", function (d) {
                 return x(d.letter);
             })
-            .attr("cy", function(d) {
+            .attr("cy", function (d) {
                 return y(d.frequency);
             })
             .attr("r", 4);
     }
-    
+
 </script>
 
 </html>
