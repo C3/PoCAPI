@@ -653,7 +653,7 @@ article {
 				google.maps.event.addListener(safemarker, 'click', function(
 						event) {
 					var data = dataDeviceMap[this.position.lat()];
-					placeMarker(map, data, this, null);
+					placeMarker(map, data, this, " ");
 				});
 			} else {
 				var damagemarker = new google.maps.Marker({
@@ -665,7 +665,7 @@ article {
 				google.maps.event.addListener(damagemarker, 'click', function(
 						event) {
 					var data = dataDeviceMap[this.position.lat()];
-					placeMarker(map, data, this, null);
+					placeMarker(map, data, this,  " ");
 				});
 			}
 
@@ -714,7 +714,7 @@ article {
 
 			google.maps.event.addListener(safemarker, 'click', function(event) {
 				var data = dataDeviceMap[this.position.lat()];
-				placeMarker(map, data, this, null);
+				placeMarker(map, data, this,  " ");
 			});
 			safemarker.setMap(map);
 		} else {
