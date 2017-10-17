@@ -45,6 +45,7 @@ app.get('/devices', function(req, res) {
 	});
 });
 
+
 app.get('/healthicon/:leak', function(req,res){
 var leak = req.params.leak;
 	console.log("Leak Probability ::: " + leak);
@@ -113,6 +114,27 @@ app.get('/getcustomerdetails/:meterId', function(req,res){
 		});
 });
 
+app.get('/maintenanceHistory/:deviceId', function(req, res) {
+	sql.connect(dbconfig)
+	.then(function() {
+	 const request = new sql.Request()
+	 var deviceId = req.params.deviceId;
+	 request.query('select * from dbo.Maintenance_details$ md where md.deviceId= deviceId', (err, result) => {
+			if(err)
+				console.log(err);
+			else {
+				console.log(result.recordset); // 
+					res.send(result.recordset);
+				}
+				sql.close();
+			});			
+	})
+	.catch(function(err) {
+	  console.log(err);
+	});
+});
+
+
 app.get('/getbillingdetails/:custId', function(req,res){
 		sql.connect(dbconfig)
 		.then(function() {
@@ -140,8 +162,8 @@ const twilioclient = require('twilio')(
 app.get('/sendsms/:address', function(req,res){
 //console.log("Tested");	
 	try {			
-			var customerMobile = '+919746781223';
-			var technicianMobile = '+919037575291';
+			var customerMobile = '+61420539737';
+			var technicianMobile = '+61450612035';
 			var msgCustomer = "Hi, we apologies for the service disruption.  The ETA for restoration is within 2 hours.  We’ll provide an update when available.";
 			var msgTechnician = "There’s an immediate outage located at " + req.params.address +  " Please proceed to site as next job";
 			sendalert(customerMobile, msgCustomer,function(response){				
