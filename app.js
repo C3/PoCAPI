@@ -119,7 +119,8 @@ app.get('/maintenanceHistory/:deviceId', function(req, res) {
 	.then(function() {
 	 const request = new sql.Request()
 	 var deviceId = req.params.deviceId;
-	 request.query('select * from dbo.Maintenance_details$ md where md.deviceId= deviceId', (err, result) => {
+	 console.log("Osama Test = " + deviceId);
+	 request.query('SELECT Top 10 deviceId, dateTime,customerId,COALESCE(NULLIF(leakReason,\'null\'), \' \') As leakReason,maintenanceStatus,maintananceSupervisorID,maintenanceSuperVisor,COALESCE(NULLIF(note,\'null\'), \' \') As note FROM dbo.Maintenance_details$ md WHERE md.deviceId = \'' + deviceId + '\'  order by dateTime desc', (err, result) => {
 			if(err)
 				console.log(err);
 			else {
@@ -127,7 +128,7 @@ app.get('/maintenanceHistory/:deviceId', function(req, res) {
 					res.send(result.recordset);
 				}
 				sql.close();
-			});			
+			});		
 	})
 	.catch(function(err) {
 	  console.log(err);
@@ -243,17 +244,33 @@ var EventHubClient = require('azure-event-hubs').Client;
 var eventHubClient = EventHubClient.fromConnectionString('Endpoint=sb://sewehd001.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=T8RE+I9K0/ch7xBuZpCXpFCkbrb5Pdcm7llU7usicmM=', 'sew-meter-data')
 
 	eventHubClient.open()
-    .then(function() {
-        return eventHubClient.createReceiver('$Default', '0', { startAfterTime: Date.now() })
-    })
-    .then(function (rx) {
-        rx.on('errorReceived', function (err) { console.log(err); }); 
-        rx.on('message', function (message) {
-            var body = message.body;
-			console.log(body);
-			io.sockets.emit('newMsg',body);
+    .then(eventHubClient.getPartitionIds.bind(eventHubClient))
+    .then(function (partitionIds) {
+        return partitionIds.map(function (partitionId) {
+            return eventHubClient.createReceiver('$Default', partitionId, { 'startAfterTime': Date.now() }).then(function (receiver) {
+		receiver.on('errorReceived', function (err) { console.log(err); });
+                receiver.on('message', function (message) {
+                	var jStrObj = String.fromCharCode.apply(null, message.body);
+                	var jStr = jStrObj.split('\n');
+                    //console.log(TextDecoder("utf-8").decode(message.body));
+                	jStr.forEach(function(entry) {
+                		//entry = entry + "}";
+                	try {	
+                	    console.log(entry);
+                		io.sockets.emit('newMsg',JSON.parse(entry));
+                	}
+                	catch (e)
+                	{
+                		console.log(e);
+                	}
+                	});
+                	
+                	                	
+                });
+            });
         });
-    });
+    })  
+
 
 var port = normalizePort(process.env.PORT || '3000');
 http.listen(port, function() {

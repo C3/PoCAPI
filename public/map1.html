@@ -3,7 +3,7 @@
 
 <head>
 <meta charset="utf-8">
-<title>MarkerClusterer SEW test</title>
+<title>MarkerClusterer test</title>
 
 <style>
 body {
@@ -12,6 +12,18 @@ body {
 	font-family: Arial;
 	font-size: 16px;
 }
+
+.hidden {
+	display: none;
+}
+
+.mainDiv {
+	height: 200px !important;
+	overflow: scroll;
+}
+
+​
+
 
 #map-container {
 	padding: 6px;
@@ -161,7 +173,7 @@ article {
 </head>
 
 <body>
-	<h3>SEW Operations Dashboard</h3>
+	<h3>Operations Dashboard</h3>
 	<div ng-app="sewApp" ng-controller="sewCtrl">
 		<nav>
 			<ul>
@@ -235,134 +247,90 @@ article {
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title align-middle">Last Three Months Consumption Trend</h4>
+				<h4 class="modal-title align-middle">Customer Summary</h4>
 			</div>
-			<table class="table table-striped">
-				<tr>
-					<td >
-						<table class="table">
-							<th colspan="2">Customer Details</th>
-							<tr>
-								<td>Customer ID</td>
-								<td>
-									<div id="custIdDiv"></div>
-								</td>
-							</tr>
-							<tr>
-								<td>Customer name</td>
-								<td>
-									<div id="custNmeDiv"></div>
-								</td>
-							</tr>
-							<tr>
-								<td>Location</td>
-								<td>
-									<div id="locDiv"></div>
-								</td>
-							</tr>
-							<tr>
-								<td>Bill Payment Date</td>
-								<td>
-									<div id="billDteDiv"></div>
-								</td>
-							</tr>
-							<tr>
-								<td>Bill Payment Due Date</td>
-								<td>
-									<div id="pydueDiv"></div>
-								</td>
-							</tr>
-							<tr>
-								<td>Last Maintenance Date</td>
-								<td>
-									<div id="lstmaintDiv"></div>
-								</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table class="table">
-							<!--  <th>Last 3 Month Consumption Trend</th>  -->
-							<tr>
-								<td>
-									<div id="svgDiv">
-										<svg></svg>
-									</div>
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2" style="width: 100%;"><b>Last 3 Month Bill Details</b></td>
-				</tr>
-				<tr>
-					<td colspan="2" style="width: 100%;">
-						<div id="billChart"></div>
-					</td>
-				</tr>
-			</table>
+			<div class="table-responsive">
+				<table class="table">
+					<tr>
+						<td>
+							<table class="table table-striped">
+								<th colspan="2">Customer Details</th>
+								<tr>
+									<td>Customer ID</td>
+									<td><div id="custIdDiv"></div></td>
+								</tr>
+								<tr>
+									<td>Customer name</td>
+									<td><div id="custNmeDiv"></div></td>
+								</tr>
+								<tr>
+									<td>Location</td>
+									<td><div id="locDiv"></div></td>
+								</tr>
+								<tr>
+									<td>Bill Payment Date</td>
+									<td><div id="billDteDiv"></div></td>
+								</tr>
+								<tr>
+									<td>Bill Payment Due Date</td>
+									<td><div id="pydueDiv"></div></td>
+								</tr>
+								<tr>
+									<td>Last Maintenance Date</td>
+									<td><div id="lstmaintDiv"></div></td>
+								</tr>
+							</table>
+						</td>
+						<td>
+							<table class="table">
+								<tr>
+									<td><b>Consumption Trend</b>
+										<div id="svgDiv">
+											<svg></svg>
+										</div></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
 
+					<tr>
+						<td colspan="2" style="width: 100%;"><b>Usage Trend</b>
+							<div id="billChart"></div></td>
+					</tr>
+
+					<tr>
+						<td colspan="2">
+							<div id="mDetails" class="pre-scrollable" style="width: 100%;">
+								<b>Maintenance Trend</b>
+								<table id="table" class="table table-striped hidden">
+									<tr>
+										<th>Device ID</th>
+										<th>Date & Time</th>
+										<th>Status</th>
+										<th>Leak Reason</th>
+										<th>Maintenance SuperVisor</th>
+										<th>Note</th>
+									</tr>
+								</table>
+							</div>
+					</td>
+					</tr>
+				</table>
+			</div>
 
 		</div>
 		<!-- End Modal content -->
-		<!--<div id="myModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Customer Details</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="col-md-12 col-lg-12 margintop20 pdg0 rightpadding0">
-                            <span>Customer ID:</span>
-                            <div id="custIdDiv"></div>
-                        </div>
-                        <div class="col-md-12 col-lg-12 margintop20 pdg0 rightpadding0">
-                            <span>Device ID:</span>
-                            <span>' + data.deviceId + '</span>
-                        </div>
-                        <div class="col-md-12 col-lg-12 margintop20 pdg0 rightpadding0">
-                            <span>Location:</span>
-                            <span>' + data.street_name + '</span>
-                        </div>
-                        <div class="col-md-12 col-lg-12 margintop20 pdg0 rightpadding0">
-                            <span>Last Maintainance Date:</span>
-                            <span>' + data.last_maintance_date.replace("T00:00:00.000Z", "") + '</span>
-                        </div>
-                        <div class="col-md-12 col-lg-12 margintop20 pdg0 rightpadding0">
-                            <span>Status:</span>
-                            <span>' + nullFormat(alarmType) + '</span>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" id="detLnk" class="btn btn-default" onClick="showCustomerDetails(\'' + data.deviceId + '\');">Details</button>
-                    </div>
-                </div>
-            </div>
-        </div>-->
-
-
-
-
-
-
-
 
 
 
 	</div>
-
-
-
 
 	<div id="inline-actions">
-
 		<input id="refresh" type="button" value="Refresh Map" class="item" />
-
 	</div>
+
 </body>
+
 <script>
 	var socket = io();
 	var styles = [ [ {
@@ -788,6 +756,7 @@ article {
 
 	/*google.maps.event.addDomListener(window, 'load', initialize);*/
 
+	//'<button type="button" class="btn btn-default" onclick="sendAlert(\'' + data.street_name + '\');">Action</button>' +
 	//content: '<div class="modal-dialog"><div>Customer Name: ' + data.customer_name + '<br>Device ID: ' + data.deviceId + '<br>Location: ' + data.street_name + ' <br> Last Maintainance Date : ' +
 	//    data.last_maintance_date.replace("T00:00:00.000Z", "") + '<br>Status:' + nullFormat(alarmType) +
 	//	'</br><a href="#" onclick="sendAlert(\''+ data.street_name +'\');"> Action </a>'+
@@ -827,9 +796,8 @@ article {
 							+ '                </div>'
 							+ '            </div>'
 							+ '        <div class="modal-footer nopadding">'
-							+
-							//'<button type="button" class="btn btn-default" onclick="sendAlert(\'' + data.street_name + '\');">Action</button>' +
-							'<a href="#" class="btn btn-default" role="button" onclick="sendAlert(\''
+							//+ '<a href="#" onclick="sendAlert(\''+ data.street_name +'\');"> Action </a>'
+							+ '<a href="#" class="btn btn-default" role="button" onclick="sendAlert(\''
 							+ data.street_name
 							+ '\');">Send Alert</a>'
 							+ '<button type="button" id="detLnk" class="btn btn-default" onClick="showCustomerDetails(\''
@@ -849,11 +817,51 @@ article {
 	// Get the <span> element that closes the modal
 	var span = document.getElementsByClassName("close")[0];
 	// When the user clicks the button, open the modal
+
+	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	function getMaintenanceHistory(deviceID) {
+
+		$.ajax({
+			url : "/maintenanceHistory/" + deviceID,
+			success : function(data) {
+
+				if (data) {
+					var len = data.length;
+					var txt = "";
+					if (len > 0) {
+						for (var i = 0; i < len; i++) {
+							if (data[i].deviceId && data[i].maintenanceStatus) {
+								txt += "<tr><td>" + data[i].deviceId
+										+ "</td><td>"
+										+ data[i].dateTime  //dateFormat(jsonDate, "mm/dd/yyyy");
+										+ "</td><td>"
+										+ data[i].maintenanceStatus
+										+ "</td><td>" + data[i].leakReason
+										+ "</td><td>"
+										+ data[i].maintenanceSuperVisor
+										+ "</td><td>" + data[i].note
+										+ "</td></tr>";
+							}
+						}
+						if (txt != "") {
+						    
+							$("#table").append(txt).removeClass("hidden");
+						}
+					}
+				}
+				delete data[key];
+			}
+		});
+	}
+
+	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 	function showCustomerDetails(propId) {
 		$.ajax({
 			url : "/getcustomerdetails/" + propId,
 			success : function(result) {
 				//alert(JSON.stringify(result));
+				getMaintenanceHistory(propId);
 				var custIdDiv = result[0].customer_id;
 				var custNmeDiv = result[0].customer_name;
 				var locDiv = result[0].street_name;
@@ -873,23 +881,25 @@ article {
 				var consumptionData = [];
 				for (var i = 0; i < result.length; i++) {
 					var x = result[i];
+					var month = monthResolver(x.bill_payment_date.replace("T00:00:00.000Z", ""));
+					
 					var y = {
-						"label" : x.bill_payment_date.replace("T00:00:00.000Z",
-								""),
+						"label" : month, //x.bill_payment_date.replace("T00:00:00.000Z",	""),
 						"Bill Amount" : x.bill_amount,
 						"Fine Amount" : x.fine_amount,
 						"Total Bill Amount" : x.total_amount_paid
 					};
 					billArray.push(y);
-					var month = monthResolver(x.bill_payment_date.replace(
-							"T00:00:00.000Z", ""));
+
 					var z = {
 						"letter" : month,
 						"frequency" : x.consumed_quantity_ltr
+
 					}
 					consumptionData.push(z);
 				}
 				modal.style.display = "block";
+
 				drawBillChart(billArray);
 				drawConsumptionChart(consumptionData);
 			}
@@ -936,6 +946,7 @@ article {
 		$.ajax({
 			url : "/sendsms/" + mobileNumber,
 			success : function(result) {
+				alert("SMS has been sent to Customer & Technical Team.")
 				//alert(result);
 			}
 		});
@@ -991,10 +1002,11 @@ article {
 			return "Vibration Hotspot Alarm";
 	}
 	function monthResolver(date) {
+		var year = date.split("-")[0];
 		var month = date.split("-")[1];
 		var monthArr = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
 				"Aug", "Sep", "Oct", "Nov", "Dec" ];
-		return monthArr[parseInt(month) - 1];
+		return monthArr[parseInt(month) - 1] + '-' + year;
 	}
 	// When the user clicks on <span> (x), close the modal
 	span.onclick = function() {
@@ -1036,6 +1048,7 @@ article {
 				});
 			});
 	function drawBillChart(dataset) {
+		
 		var columnsInfo = {
 			"Bill Amount" : "Bill Amount",
 			"Fine Amount" : "Fine Amount",
@@ -1058,8 +1071,9 @@ article {
 		var groupChart = new groupBarChart(barChartConfig);
 	}
 	function drawConsumptionChart(data) {
+
 		d3.select("svg").remove();
-		document.getElementById("svgDiv").innerHTML = '<svg width="460" height="260"></svg>';
+		document.getElementById("svgDiv").innerHTML = '<svg  class="table-responsive" width="460" height="250"></svg>';
 		var svg = d3.select("svg"), margin = {
 			top : 10,
 			right : 0,
