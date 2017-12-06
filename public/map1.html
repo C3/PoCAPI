@@ -3,7 +3,7 @@
 
 <head>
 <meta charset="utf-8">
-<title>MarkerClusterer test</title>
+<title></title>
 
 <style>
 body {
@@ -173,7 +173,7 @@ article {
 </head>
 
 <body>
-	<h3>Operations Dashboard</h3>
+	<h3></h3>
 	<div ng-app="sewApp" ng-controller="sewCtrl">
 		<nav>
 			<ul>
@@ -187,46 +187,45 @@ article {
 			</ul>
 			<ul>
 				<li><input type="checkbox"
-					onchange="applyFilter('lowFlowLL',this);" />Low Flow Alarm</li>
+					onchange="applyFilter('lowFlowLL',this);" />Meter Tamper alarm</li>
 			</ul>
 			<ul>
 				<li><input type="checkbox"
-					onchange="applyFilter('highFlowLL',this);" />High Flow Alarm</li>
+					onchange="applyFilter('highFlowLL',this);" />Outage/Last gasp alarm</li>
 			</ul>
 			<ul>
 				<li><input type="checkbox"
-					onchange="applyFilter('contUsageLL',this);" />Cont. Usage Alarm</li>
+					onchange="applyFilter('contUsageLL',this);" />Loss of neutral detected</li>
 			</ul>
 			<ul>
 				<li><input type="checkbox"
-					onchange="applyFilter('reverseFlowLL',this);" />Reverse Flow Alarm
+					onchange="applyFilter('reverseFlowLL',this);" />Reverse energy flow
 				</li>
 			</ul>
 			<ul>
 				<li><input type="checkbox"
-					onchange="applyFilter('emptyPipeLL',this);" />Empty Pipe</li>
+					onchange="applyFilter('emptyPipeLL',this);" />Firmware upgrade failure</li>
 			</ul>
 			<ul>
 				<li><input type="checkbox"
-					onchange="applyFilter('highPressureLL',this);" />High Pressure
-					Alarm</li>
+					onchange="applyFilter('highPressureLL',this);" />Communication failure</li>
 			</ul>
 			<ul>
 				<li><input type="checkbox"
-					onchange="applyFilter('nwLeakLL',this);" />Network Leak</li>
+					onchange="applyFilter('nwLeakLL',this);" />Meter temperature gradient breach</li>
 			</ul>
 			<ul>
 				<li><input type="checkbox"
-					onchange="applyFilter('lowTempLL',this);" />Low Temperature</li>
+					onchange="applyFilter('lowTempLL',this);" />Security certificate expired</li>
 			</ul>
-			<ul>
+			<!-- <ul>
 				<li><input type="checkbox"
 					onchange="applyFilter('highTempLL',this);" />High Temperature</li>
 			</ul>
 			<ul>
 				<li><input type="checkbox"
 					onchange="applyFilter('vibHotLL',this);" />Vibration Hotspot</li>
-			</ul>
+			</ul> -->
 		</nav>
 
 		<article>
